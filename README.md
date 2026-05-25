@@ -47,6 +47,10 @@ Desenvolver uma plataforma de rede social voltada ao rastreamento de hábitos (*
 - **Persistência:** armazenamento via arquivos JSON, substituindo banco de dados relacional para este protótipo, garantindo portabilidade entre ambientes de teste.
 - **Comunicação:** Front-end e Back-end se comunicam via API REST.
 
+## Desenvolvimento local
+
+Consulte o [guia de desenvolvimento](docs/development.md) para rodar back-end e front-end juntos em ambiente local.
+
 ---
 
 ## Diferencial de Mercado
