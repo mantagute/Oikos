@@ -1,10 +1,11 @@
 package oikos.domain.model;
 
-public class Evento {
+public class Evento extends Entidade{
     private String nome;
     private int pontos;
 
     public Evento(String nome, int pontos) {
+        super();
         this.nome = nome;
         this.pontos = pontos;
     }
