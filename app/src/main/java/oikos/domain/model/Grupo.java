@@ -71,9 +71,9 @@ public class Grupo implements Pontuavel, Autenticavel {
 
     public void adicionarPontos(int pontos){
         this.pontuacaoAtual = this.pontuacaoAtual + pontos;
-        if (this.pontuacaoAtual >= this.metaPontos) {
+        while (this.pontuacaoAtual >= this.metaPontos) {
             this.metasBatidas++;
-            this.pontuacaoAtual = 0;
+            this.pontuacaoAtual = this.pontuacaoAtual - this.metaPontos;
         }
     }
 
