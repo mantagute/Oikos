@@ -7,19 +7,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Classe base abstrata para gerenciamento de coleções de entidades do domínio.
+ * Mantém uma referência ao Grupo de origem para validações de contexto.
+ * 
+ * @param <TipoEntidade> O tipo de entidade que este gerenciador controla (deve estender Entidade).
+ */
 public abstract class Gerenciador <TipoEntidade extends Entidade>{
     private List<TipoEntidade> entidades;
     private Grupo grupoOrigem;
 
+    /**
+     * Cria um novo gerenciador vinculado a um grupo específico.
+     * @param grupoOrigem Grupo ao qual esta coleção pertence.
+     */
     public Gerenciador(Grupo grupoOrigem) {
         this.grupoOrigem = grupoOrigem;
         this.entidades = new ArrayList<>();
     }
 
+    /**
+     * Retorna a lista completa de entidades gerenciadas.
+     * @return Lista contendo todas as entidades.
+     */
     public List<TipoEntidade> getListaEntidades() {
         return entidades;
     }
 
+    /**
+     * Busca uma entidade específica dentro da coleção pelo seu UUID.
+     * @param id O UUID da entidade a ser buscada.
+     * @return A entidade encontrada, ou null se não existir.
+     */
     public TipoEntidade getPorId(UUID id) {
         for (TipoEntidade entidade : entidades) {
             if (entidade.getId().equals(id)) {
@@ -29,10 +48,18 @@ public abstract class Gerenciador <TipoEntidade extends Entidade>{
         return null;
     }
 
+    /**
+     * Adiciona uma nova entidade à coleção deste gerenciador.
+     * @param entidade A entidade a ser inserida.
+     */
     public void adicionarEntidade(TipoEntidade entidade) {
         entidades.add(entidade);
     }
 
+    /**
+     * Remove uma entidade da coleção com base em seu UUID.
+     * @param id O UUID da entidade a ser removida.
+     */
     public void removerEntidade(UUID id) {
         entidades.removeIf(entidade -> entidade.getId().equals(id));
     }
