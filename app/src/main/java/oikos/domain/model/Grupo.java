@@ -3,8 +3,7 @@ package oikos.domain.model;
 import oikos.domain.interfaces.Autenticavel;
 import oikos.domain.interfaces.Classificavel;
 import oikos.domain.interfaces.Pontuavel;
-import oikos.domain.manager.GerenciadorEventos;
-import oikos.domain.manager.GerenciadorPessoas;
+import oikos.domain.manager.Gerenciador;
 
 /**
  * Representa um Grupo no sistema Oikos.
@@ -14,8 +13,8 @@ import oikos.domain.manager.GerenciadorPessoas;
 public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classificavel{
     private String nome;
     private String senha;
-    private GerenciadorEventos gerenciadorEventos;
-    private GerenciadorPessoas gerenciadorPessoas;
+    private Gerenciador<Evento> gerenciadorEventos;
+    private Gerenciador<Pessoa> gerenciadorPessoas;
     private int metaPontos;
     private int pontuacaoAtual;
     private int metasBatidas;
@@ -29,8 +28,8 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         super();
         this.nome = nome;
         this.senha = senha;
-        this.gerenciadorEventos = new GerenciadorEventos(this);
-        this.gerenciadorPessoas = new GerenciadorPessoas(this);
+        this.gerenciadorEventos = new Gerenciador<Evento>(this);
+        this.gerenciadorPessoas = new Gerenciador<Pessoa>(this);
         this.metaPontos = 1000; // Meta padrão, pode ser ajustada
         this.pontuacaoAtual = 0;
         this.metasBatidas = 0;
@@ -53,11 +52,11 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         return metasBatidas;
     }
 
-    public GerenciadorEventos getGerenciadorEventos() {
+    public Gerenciador<Evento> getGerenciadorEventos() {
         return gerenciadorEventos;
     }
 
-    public GerenciadorPessoas getGerenciadorPessoas() {
+    public Gerenciador<Pessoa> getGerenciadorPessoas() {
         return gerenciadorPessoas;
     }
 

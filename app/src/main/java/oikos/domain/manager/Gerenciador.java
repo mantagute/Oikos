@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Classe base abstrata para gerenciamento de coleções de entidades do domínio.
+ * Classe genérica concreta para gerenciamento de coleções de entidades do domínio.
  * Mantém uma referência ao Grupo de origem para validações de contexto.
- * 
+ *
  * @param <TipoEntidade> O tipo de entidade que este gerenciador controla (deve estender Entidade).
  */
-public abstract class Gerenciador <TipoEntidade extends Entidade>{
+public class Gerenciador<TipoEntidade extends Entidade> {
     private List<TipoEntidade> entidades;
     private Grupo grupoOrigem;
 
@@ -49,7 +49,7 @@ public abstract class Gerenciador <TipoEntidade extends Entidade>{
     }
 
     /**
-     * Adiciona uma nova entidade à coleção deste gerenciador.
+     * Adiciona uma entidade à coleção.
      * @param entidade A entidade a ser inserida.
      */
     public void adicionarEntidade(TipoEntidade entidade) {

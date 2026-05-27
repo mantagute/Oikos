@@ -1,6 +1,8 @@
 package oikos.service;
 
 import oikos.domain.model.Grupo;
+import oikos.domain.model.Pessoa;
+import oikos.domain.model.Evento;
 import oikos.util.HolderGrupoSelecionado;
 
 import java.util.ArrayList;
@@ -36,15 +38,15 @@ public class ServicoGrupos {
      */
     public Grupo criarGrupo(String nome, String senha) {
 
-        if (nome.isBlank()) {
+        if (nome.isBlank()){
             throw new IllegalArgumentException("Nome não pode ser vazio");
-        }
+        }    
         if (senha.isBlank()){
             throw new IllegalArgumentException("Senha não pode ser vazia");
         }
-        if (grupos.stream().anyMatch(grupo -> grupo.getNome().equalsIgnoreCase(nome))) {    
+        if (grupos.stream().anyMatch(grupo -> grupo.getNome().equalsIgnoreCase(nome))) {
             throw new IllegalArgumentException("Já existe um grupo com esse nome");
-        }
+        }   
 
         Grupo novo = new Grupo(nome, senha);
         grupos.add(novo);
@@ -52,7 +54,11 @@ public class ServicoGrupos {
         return novo;
     }
 
-    /** Retorna uma cópia da lista de todos os grupos cadastrados. */
+    /**
+     * Retorna uma cópia da lista de todos os grupos cadastrados.
+     *
+     * @return lista de {@link Grupo} disponíveis no sistema
+     */
     public List<Grupo> getListaGrupos() {
         return new ArrayList<>(grupos);
     }
@@ -66,8 +72,8 @@ public class ServicoGrupos {
      */
     public Grupo getGrupoPorId(UUID id) {
         for (Grupo grupo : grupos) {
-            if ((grupo.getId().equals(id))) {
-                return grupo;
+            if (grupo.getId().equals(id)){
+                return grupo;   
             }
         }
         throw new NoSuchElementException("Grupo não encontrado");
@@ -90,13 +96,11 @@ public class ServicoGrupos {
 
         grupos.remove(grupo);
 
-        // limpa seleção se o grupo excluído era o ativo
         UUID selecionado = holder.getGrupoSelecionadoId();
         if (selecionado != null && selecionado.equals(id)) {
             holder.clear();
         }
     }
-
 
     /**
      * Define qual grupo está ativo.
@@ -106,9 +110,7 @@ public class ServicoGrupos {
      * @throws NoSuchElementException se o grupo não for encontrado
      */
     public void selecionarGrupo(UUID id) {
-        if (getGrupoPorId(id) == null) {
-            throw new NoSuchElementException("Grupo não encontrado");
-        }
+        getGrupoPorId(id);
         holder.setGrupoSelecionadoId(id);
     }
 
@@ -123,4 +125,19 @@ public class ServicoGrupos {
         return getGrupoPorId(id);
     }
 
+    /**
+     * Registra a realização de uma atividade por uma pessoa em um evento,
+     * delegando a lógica de pontuação ao grupo atualmente selecionado.
+     *
+     * @param pessoaId identificador da pessoa que realizou a atividade
+     * @param eventoId identificador do evento realizado
+     * @throws IllegalArgumentException se a pessoa ou evento não pertencerem ao grupo ativo
+     * @throws NoSuchElementException   se nenhum grupo estiver selecionado
+     */
+    public void pontuar(UUID pessoaId, UUID eventoId) {
+        Grupo grupo = getGrupoSelecionado();
+        Pessoa pessoa = grupo.getGerenciadorPessoas().getPorId(pessoaId);
+        Evento evento = grupo.getGerenciadorEventos().getPorId(eventoId);
+        grupo.pontuar(pessoa, evento);
+    }
 }
