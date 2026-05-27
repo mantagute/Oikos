@@ -10,7 +10,7 @@ import oikos.domain.manager.GerenciadorPessoas;
  * É a entidade central (Aggregate Root) que gerencia pessoas, eventos e metas.
  * Implementa as lógicas de pontuação e autenticação do grupo.
  */
-public class Grupo implements Pontuavel, Autenticavel {
+public class Grupo extends Entidade implements Pontuavel, Autenticavel {
     private String nome;
     private String senha;
     private GerenciadorEventos gerenciadorEventos;
@@ -25,6 +25,7 @@ public class Grupo implements Pontuavel, Autenticavel {
      * @param senha Senha de acesso do grupo.
      */
     public Grupo(String nome, String senha) {
+        super();
         this.nome = nome;
         this.senha = senha;
         this.gerenciadorEventos = new GerenciadorEventos(this);
