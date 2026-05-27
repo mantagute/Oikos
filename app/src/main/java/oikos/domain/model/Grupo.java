@@ -1,6 +1,7 @@
 package oikos.domain.model;
 
 import oikos.domain.interfaces.Autenticavel;
+import oikos.domain.interfaces.Classificavel;
 import oikos.domain.interfaces.Pontuavel;
 import oikos.domain.manager.GerenciadorEventos;
 import oikos.domain.manager.GerenciadorPessoas;
@@ -10,7 +11,7 @@ import oikos.domain.manager.GerenciadorPessoas;
  * É a entidade central (Aggregate Root) que gerencia pessoas, eventos e metas.
  * Implementa as lógicas de pontuação e autenticação do grupo.
  */
-public class Grupo extends Entidade implements Pontuavel, Autenticavel {
+public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classificavel{
     private String nome;
     private String senha;
     private GerenciadorEventos gerenciadorEventos;
@@ -43,6 +44,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel {
         return metaPontos;
     }
 
+    @Override
     public int getPontuacaoAtual() {
         return pontuacaoAtual;
     }
@@ -57,6 +59,10 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel {
 
     public GerenciadorPessoas getGerenciadorPessoas() {
         return gerenciadorPessoas;
+    }
+
+    public String getClassificacao() {
+        return classificar(metasBatidas);
     }
 
     /**
