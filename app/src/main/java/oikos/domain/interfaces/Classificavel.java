@@ -13,7 +13,8 @@ public interface Classificavel {
      */
     default String classificar(int metasBatidas) 
     {
-        if (metasBatidas >= 5) {return "Ouro";}
+        if (metasBatidas >= 10) {return "Diamante";}
+        else if (metasBatidas >= 5) {return "Ouro";}
         else if (metasBatidas >= 3) {return "Prata";}
         else if (metasBatidas >= 1) {return "Bronze";}
         else {return "Iniciante";}
