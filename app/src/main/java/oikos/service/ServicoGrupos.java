@@ -2,6 +2,7 @@ package oikos.service;
 
 import oikos.domain.model.Grupo;
 import oikos.domain.model.Pessoa;
+import oikos.domain.interfaces.Persistivel;
 import oikos.domain.model.Evento;
 import oikos.util.HolderGrupoSelecionado;
 
@@ -10,6 +11,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
+import java.io.File;
+
 /**
  * Serviço que gerencia os grupos em memória.
  * <p>
@@ -17,9 +23,9 @@ import java.util.UUID;
  * além de controlar qual grupo está ativo via {@link HolderGrupoSelecionado}.
  * </p>
  */
-public class ServicoGrupos {
+public class ServicoGrupos implements Persistivel {
 
-    private final List<Grupo> grupos = new ArrayList<>();
+    private List<Grupo> grupos = new ArrayList<>();
     private final HolderGrupoSelecionado holder;
 
     public ServicoGrupos(HolderGrupoSelecionado holder) {
@@ -34,19 +40,20 @@ public class ServicoGrupos {
      * @param nome  nome do grupo (não pode ser vazio, deve ser único)
      * @param senha senha do grupo (não pode ser vazia)
      * @return o {@link Grupo} criado
-     * @throws IllegalArgumentException se nome/senha forem inválidos ou nome já existir
+     * @throws IllegalArgumentException se nome/senha forem inválidos ou nome já
+     *                                  existir
      */
     public Grupo criarGrupo(String nome, String senha) {
 
-        if (nome.isBlank()){
+        if (nome.isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
-        }    
-        if (senha.isBlank()){
+        }
+        if (senha.isBlank()) {
             throw new IllegalArgumentException("Senha não pode ser vazia");
         }
         if (grupos.stream().anyMatch(grupo -> grupo.getNome().equalsIgnoreCase(nome))) {
             throw new IllegalArgumentException("Já existe um grupo com esse nome");
-        }   
+        }
 
         Grupo novo = new Grupo(nome, senha);
         grupos.add(novo);
@@ -72,8 +79,8 @@ public class ServicoGrupos {
      */
     public Grupo getGrupoPorId(UUID id) {
         for (Grupo grupo : grupos) {
-            if (grupo.getId().equals(id)){
-                return grupo;   
+            if (grupo.getId().equals(id)) {
+                return grupo;
             }
         }
         throw new NoSuchElementException("Grupo não encontrado");
@@ -118,7 +125,8 @@ public class ServicoGrupos {
      * Retorna o grupo atualmente selecionado.
      *
      * @return o {@link Grupo} ativo
-     * @throws NoSuchElementException se nenhum grupo estiver selecionado ou o ID não existir
+     * @throws NoSuchElementException se nenhum grupo estiver selecionado ou o ID
+     *                                não existir
      */
     public Grupo getGrupoSelecionado() {
         UUID id = holder.getGrupoSelecionadoId();
@@ -131,7 +139,8 @@ public class ServicoGrupos {
      *
      * @param pessoaId identificador da pessoa que realizou a atividade
      * @param eventoId identificador do evento realizado
-     * @throws IllegalArgumentException se a pessoa ou evento não pertencerem ao grupo ativo
+     * @throws IllegalArgumentException se a pessoa ou evento não pertencerem ao
+     *                                  grupo ativo
      * @throws NoSuchElementException   se nenhum grupo estiver selecionado
      */
     public void pontuar(UUID pessoaId, UUID eventoId) {
@@ -147,5 +156,47 @@ public class ServicoGrupos {
         }
         
         grupo.pontuar(pessoa, evento);
+    }
+
+    @Override
+    /**
+     * Salva a lista de grupos em um arquivo json, com o nome grupos.json
+     * 
+     * @return String o nome do arquivo gerado, que por padrão é grupos.json
+     */
+    public String salvar() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File("grupos.json"), this.grupos);
+            return "grupos.json";
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar os grupos em um arquivo JSON", e);
+        }
+    }
+
+    @Override
+    /**
+     * Recupera a lista de grupos do arquivo grupos.json, se ele existir
+     */
+    public void recuperar() {
+        File arquivo = new File("grupos.json");
+        if (!arquivo.exists()) {
+            this.grupos = new ArrayList<>();
+            return;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            this.grupos = mapper.readValue(arquivo, new TypeReference<List<Grupo>>() {
+            });
+            
+            for (Grupo grupo : this.grupos) {
+                grupo.getGerenciadorEventos().setGrupoOrigem(grupo);
+                grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
+            }
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao recuperar os grupos do arquivo JSON", e);
+        }
     }
 }

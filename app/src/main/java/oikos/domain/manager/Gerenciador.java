@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Classe genérica concreta para gerenciamento de coleções de entidades do domínio.
  * Mantém uma referência ao Grupo de origem para validações de contexto.
@@ -15,7 +17,11 @@ import java.util.UUID;
  */
 public class Gerenciador<TipoEntidade extends Entidade> {
     private List<TipoEntidade> entidades;
+    @JsonIgnore
     private Grupo grupoOrigem;
+
+    /** Construtor padrão para o Jackson */
+    public Gerenciador() {}
 
     /**
      * Cria um novo gerenciador vinculado a um grupo específico.
@@ -32,6 +38,22 @@ public class Gerenciador<TipoEntidade extends Entidade> {
      */
     public List<TipoEntidade> getListaEntidades() {
         return entidades;
+    }
+
+    /**
+     * Permite ao Jackson injetar a lista desserializada.
+     */
+    public void setListaEntidades(List<TipoEntidade> entidades) {
+        this.entidades = entidades;
+    }
+
+    /**
+     * Restaura a referência ao grupo de origem após a desserialização.
+     * @param grupoOrigem O grupo dono deste gerenciador.
+     */
+    @JsonIgnore
+    public void setGrupoOrigem(Grupo grupoOrigem) {
+        this.grupoOrigem = grupoOrigem;
     }
 
     /**

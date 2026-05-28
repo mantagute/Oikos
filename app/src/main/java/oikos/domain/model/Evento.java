@@ -1,5 +1,8 @@
 package oikos.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Representa uma atividade pontuável realizada no contexto de um Grupo.
  * Cada evento possui um nome descritivo e um valor de pontos que será
@@ -15,7 +18,8 @@ public class Evento extends Entidade {
      * @param nome   O nome descritivo da atividade (ex: "Leitura Bíblica").
      * @param pontos A quantidade de pontos que este evento vale ao ser realizado.
      */
-    public Evento(String nome, int pontos) {
+    @JsonCreator
+    public Evento(@JsonProperty("nome") String nome,@JsonProperty("pontos") int pontos) {
         super();
         this.nome = nome;
         this.pontos = pontos;

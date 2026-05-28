@@ -1,5 +1,8 @@
 package oikos.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import oikos.domain.interfaces.Autenticavel;
 import oikos.domain.interfaces.Classificavel;
 import oikos.domain.interfaces.Pontuavel;
@@ -12,6 +15,7 @@ import oikos.domain.manager.Gerenciador;
  */
 public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classificavel{
     private String nome;
+    @JsonProperty("senha")
     private String senha;
     private Gerenciador<Evento> gerenciadorEventos;
     private Gerenciador<Pessoa> gerenciadorPessoas;
@@ -24,12 +28,13 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
      * @param nome Nome do grupo.
      * @param senha Senha de acesso do grupo.
      */
-    public Grupo(String nome, String senha) {
+    @JsonCreator
+    public Grupo(@JsonProperty("nome") String nome,@JsonProperty("senha") String senha) {
         super();
         this.nome = nome;
         this.senha = senha;
-        this.gerenciadorEventos = new Gerenciador<Evento>(this);
-        this.gerenciadorPessoas = new Gerenciador<Pessoa>(this);
+        this.gerenciadorEventos = new Gerenciador<>(this);
+        this.gerenciadorPessoas = new Gerenciador<>(this);
         this.metaPontos = 1000; // Meta padrão, pode ser ajustada
         this.pontuacaoAtual = 0;
         this.metasBatidas = 0;
@@ -43,13 +48,23 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         return metaPontos;
     }
 
+    public void setMeta(int meta) {
+        this.metaPontos = meta;
+    }
+
     @Override
     public int getPontuacaoAtual() {
         return pontuacaoAtual;
     }
+    public void setPontuacaoAtual(int valor) {
+        this.pontuacaoAtual = valor;
+    }
 
     public int getMetasBatidas() {
         return metasBatidas;
+    }
+    public void setMetasBatidas(int valor) {
+        this.metasBatidas = valor;
     }
 
     public Gerenciador<Evento> getGerenciadorEventos() {
@@ -75,6 +90,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
     /**
      * Zera o placar de pontuação atual do grupo.
      */
+    @Override
     public void reiniciarPontos() {
         this.pontuacaoAtual = 0;
     }
@@ -84,6 +100,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
      * @param senhaInformada Senha a ser testada.
      * @return true se a senha estiver correta, false caso contrário.
      */
+    @Override
     public boolean autenticarSenha(String senhaInformada) {
         return this.senha.equals(senhaInformada);
     }
@@ -108,6 +125,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
      * incrementa o contador de metas batidas e retém o saldo de pontos excedente.
      * @param pontos Quantidade de pontos a adicionar.
      */
+    @Override
     public void adicionarPontos(int pontos){
         this.pontuacaoAtual = this.pontuacaoAtual + pontos;
         while (this.pontuacaoAtual >= this.metaPontos) {

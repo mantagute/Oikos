@@ -1,5 +1,8 @@
 package oikos.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Representa um membro pertencente a um Grupo.
  * Cada pessoa é identificada unicamente pelo UUID herdado de {@link Entidade}
@@ -13,7 +16,8 @@ public class Pessoa extends Entidade {
      *
      * @param nome O nome do membro a ser cadastrado no grupo.
      */
-    public Pessoa(String nome) {
+    @JsonCreator
+    public Pessoa(@JsonProperty("nome") String nome) {
         super();
         this.nome = nome;
     }
