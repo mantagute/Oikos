@@ -1,5 +1,8 @@
 package oikos.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import oikos.domain.interfaces.Autenticavel;
 import oikos.domain.interfaces.Classificavel;
 import oikos.domain.interfaces.Pontuavel;
@@ -24,7 +27,8 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
      * @param nome Nome do grupo.
      * @param senha Senha de acesso do grupo.
      */
-    public Grupo(String nome, String senha) {
+    @JsonCreator
+    public Grupo(@JsonProperty("nome") String nome,@JsonProperty("senha") String senha) {
         super();
         this.nome = nome;
         this.senha = senha;
@@ -43,13 +47,23 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         return metaPontos;
     }
 
+    public void setMeta(int meta) {
+        this.metaPontos = meta;
+    }
+
     @Override
     public int getPontuacaoAtual() {
         return pontuacaoAtual;
     }
+    public void setPontuacaoAtual(int valor) {
+        this.pontuacaoAtual = valor;
+    }
 
     public int getMetasBatidas() {
         return metasBatidas;
+    }
+    public void setMetasBatidas(int valor) {
+        this.metasBatidas = valor;
     }
 
     public Gerenciador<Evento> getGerenciadorEventos() {

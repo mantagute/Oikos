@@ -1,5 +1,4 @@
 package oikos.domain.interfaces;
-import oikos.domain.model.Entidade;
 
 /**
  * Permite salvar dados em um JSON e recuperá-los

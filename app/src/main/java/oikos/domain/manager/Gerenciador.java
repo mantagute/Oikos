@@ -20,7 +20,8 @@ public class Gerenciador<TipoEntidade extends Entidade> {
     @JsonIgnore
     private Grupo grupoOrigem;
 
-    protected Gerenciador() {}
+    /** Construtor padrão para o Jackson */
+    public Gerenciador() {}
 
     /**
      * Cria um novo gerenciador vinculado a um grupo específico.
@@ -37,6 +38,22 @@ public class Gerenciador<TipoEntidade extends Entidade> {
      */
     public List<TipoEntidade> getListaEntidades() {
         return entidades;
+    }
+
+    /**
+     * Permite ao Jackson injetar a lista desserializada.
+     */
+    public void setListaEntidades(List<TipoEntidade> entidades) {
+        this.entidades = entidades;
+    }
+
+    /**
+     * Restaura a referência ao grupo de origem após a desserialização.
+     * @param grupoOrigem O grupo dono deste gerenciador.
+     */
+    @JsonIgnore
+    public void setGrupoOrigem(Grupo grupoOrigem) {
+        this.grupoOrigem = grupoOrigem;
     }
 
     /**

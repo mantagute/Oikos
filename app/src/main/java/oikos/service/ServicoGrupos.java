@@ -153,6 +153,8 @@ public class ServicoGrupos implements Persistivel {
     @Override
     /**
      * Salva a lista de grupos em um arquivo json, com o nome grupos.json
+     * 
+     * @return String o nome do arquivo gerado, que por padrão é grupos.json
      */
     public String salvar() {
         ObjectMapper mapper = new ObjectMapper();
@@ -165,6 +167,9 @@ public class ServicoGrupos implements Persistivel {
     }
 
     @Override
+    /**
+     * Recupera a lista de grupos do arquivo grupos.json, se ele existir
+     */
     public void recuperar() {
         File arquivo = new File("grupos.json");
         if (!arquivo.exists()) {
@@ -176,6 +181,12 @@ public class ServicoGrupos implements Persistivel {
         try {
             this.grupos = mapper.readValue(arquivo, new TypeReference<List<Grupo>>() {
             });
+            
+            for (Grupo grupo : this.grupos) {
+                grupo.getGerenciadorEventos().setGrupoOrigem(grupo);
+                grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
+            }
+            
         } catch (IOException e) {
             throw new RuntimeException("Erro ao recuperar os grupos do arquivo JSON", e);
         }

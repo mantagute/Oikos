@@ -24,4 +24,7 @@ public abstract class Entidade {
     public UUID getId() {
         return Id;
     }
+    public void setId(UUID in) {
+        this.Id = in;
+    }
 }
