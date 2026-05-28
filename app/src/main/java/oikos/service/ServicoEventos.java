@@ -29,6 +29,7 @@ public class ServicoEventos extends ServicoEntidades<Evento> {
      * @param evento O evento a ser adicionado.
      * @throws IllegalArgumentException se o nome for vazio ou os pontos forem menores ou iguais a zero.
      */
+    @Override
     public void adicionar(Evento evento) {
         if (evento.getNome() == null || evento.getNome().isBlank()) {
             throw new IllegalArgumentException("Nome do evento não pode ser vazio.");
