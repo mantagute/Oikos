@@ -137,7 +137,15 @@ public class ServicoGrupos {
     public void pontuar(UUID pessoaId, UUID eventoId) {
         Grupo grupo = getGrupoSelecionado();
         Pessoa pessoa = grupo.getGerenciadorPessoas().getPorId(pessoaId);
+        if (pessoa == null) {
+            throw new IllegalArgumentException("Pessoa não encontrada no grupo ativo");
+        }
+        
         Evento evento = grupo.getGerenciadorEventos().getPorId(eventoId);
+        if (evento == null) {
+            throw new IllegalArgumentException("Evento não encontrado no grupo ativo");
+        }
+        
         grupo.pontuar(pessoa, evento);
     }
 }

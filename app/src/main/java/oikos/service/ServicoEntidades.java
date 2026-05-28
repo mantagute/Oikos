@@ -9,41 +9,47 @@ import java.util.UUID;
 
 /**
  * Serviço genérico que encapsula operações CRUD comuns sobre entidades do domínio,
- * adicionando validação e tratamento de exceções sobre o Gerenciador.
+ * operando sempre sobre o grupo atualmente selecionado.
  *
  * @param <TipoEntidade> O tipo de entidade gerenciada (deve estender Entidade).
  */
 public abstract class ServicoEntidades<TipoEntidade extends Entidade> {
 
-    protected final Gerenciador<TipoEntidade> gerenciador;
+    protected final ServicoGrupos servicoGrupos;
 
     /**
-     * Cria o serviço vinculado a um gerenciador específico.
+     * Cria o serviço vinculado ao gerenciador de grupos.
      *
-     * @param gerenciador O gerenciador que mantém a coleção de entidades.
+     * @param servicoGrupos O serviço de grupos, que mantém o grupo ativo.
      */
-    public ServicoEntidades(Gerenciador<TipoEntidade> gerenciador) {
-        this.gerenciador = gerenciador;
+    public ServicoEntidades(ServicoGrupos servicoGrupos) {
+        this.servicoGrupos = servicoGrupos;
     }
 
     /**
-     * Retorna a lista de todas as entidades gerenciadas.
+     * Obtém o gerenciador correspondente do grupo atualmente ativo.
+     * Subclasses devem implementar este método para retornar o gerenciador correto (pessoas, eventos, etc).
+     */
+    protected abstract Gerenciador<TipoEntidade> getGerenciadorAtual();
+
+    /**
+     * Retorna a lista de todas as entidades gerenciadas no grupo ativo.
      *
      * @return Lista com todas as entidades.
      */
     public List<TipoEntidade> getLista() {
-        return gerenciador.getListaEntidades();
+        return getGerenciadorAtual().getListaEntidades();
     }
 
     /**
-     * Busca uma entidade pelo seu UUID.
+     * Busca uma entidade pelo seu UUID no grupo ativo.
      *
      * @param id UUID da entidade.
      * @return A entidade encontrada.
-     * @throws NoSuchElementException se nenhuma entidade com o ID informado existir.
+     * @throws NoSuchElementException se nenhuma entidade com o ID informado existir no grupo ativo.
      */
     public TipoEntidade getPorId(UUID id) {
-        TipoEntidade entidade = gerenciador.getPorId(id);
+        TipoEntidade entidade = getGerenciadorAtual().getPorId(id);
         if (entidade == null) {
             throw new NoSuchElementException("Entidade não encontrada com o id: " + id);
         }
@@ -51,7 +57,7 @@ public abstract class ServicoEntidades<TipoEntidade extends Entidade> {
     }
 
     /**
-     * Adiciona uma entidade à coleção.
+     * Adiciona uma entidade à coleção do grupo ativo.
      * Subclasses devem sobrescrever este método para aplicar validações específicas.
      *
      * @param entidade A entidade a ser adicionada.
@@ -59,13 +65,13 @@ public abstract class ServicoEntidades<TipoEntidade extends Entidade> {
     public abstract void adicionar(TipoEntidade entidade);
 
     /**
-     * Remove uma entidade da coleção pelo seu UUID.
+     * Remove uma entidade da coleção do grupo ativo pelo seu UUID.
      *
      * @param id UUID da entidade a ser removida.
-     * @throws NoSuchElementException se nenhuma entidade com o ID informado existir.
+     * @throws NoSuchElementException se nenhuma entidade com o ID informado existir no grupo ativo.
      */
     public void remover(UUID id) {
         getPorId(id); // valida existência antes de remover
-        gerenciador.removerEntidade(id);
+        getGerenciadorAtual().removerEntidade(id);
     }
 }
