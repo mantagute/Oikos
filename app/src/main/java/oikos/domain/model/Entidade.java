@@ -7,13 +7,13 @@ import java.util.UUID;
  * Fornece a identidade única (UUID) padronizada para todas as subclasses.
  */
 public abstract class Entidade {
-    private UUID Id;
+    private UUID id;
 
     /**
      * Inicializa a entidade gerando automaticamente um identificador único (UUID).
      */
     protected Entidade() {
-        this.Id = UUID.randomUUID();
+        this.id = UUID.randomUUID();
     }
 
     /**
@@ -22,9 +22,9 @@ public abstract class Entidade {
      * @return O {@link UUID} que identifica esta entidade de forma única no sistema.
      */
     public UUID getId() {
-        return Id;
+        return id;
     }
-    public void setId(UUID in) {
-        this.Id = in;
+    public void setId(UUID id) {
+        this.id = id;
     }
 }
