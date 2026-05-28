@@ -10,12 +10,22 @@ function App() {
           <h2>Seja bem vindo</h2>
         </div>
         <div id='grupos'>
-          <div>
+          <div id="criar">
+            <input 
+              className='entrada'
+              type="text"
+              placeholder='+ Nome do novo grupo'
+            />
+            <input 
+              className='entrada'
+              type="text"
+              placeholder='+ Senha do novo grupo'
+            />
             <button 
-              className='criarGrupoButton'
+              className='criarButton'
               onClick={() => {}}
             >
-              Criar Grupo
+              + Criar Grupo
             </button>
           </div>
         </div>

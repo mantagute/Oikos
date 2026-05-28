@@ -6,13 +6,26 @@
 #grupos {
   display: block;
   margin-top: 40px;
+}
 
-  .criarGrupoButton {
+#criar {
+  display: inline-block;
+  justify-content: center;
+  padding: 15px 15px;
+  border-radius: 15px;
+  border: 1px solid gray;
+  
+
+  .entrada {
+    border-radius: 30px;
+    padding: 5px 15px;
+  }
+  .criarButton {
     border-radius: 30px;
     font-size: medium;
     padding: 5px 15px;
   }
-  .criarGrupoButton:hover {
+  .criarButton:hover {
     background-color: darkgray;
   }
 }
