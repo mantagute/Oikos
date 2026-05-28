@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.io.File;
+import org.springframework.stereotype.Service;
+import jakarta.annotation.PostConstruct;
 
 /**
  * Serviço que gerencia os grupos em memória.
@@ -23,6 +25,7 @@ import java.io.File;
  * além de controlar qual grupo está ativo via {@link HolderGrupoSelecionado}.
  * </p>
  */
+@Service
 public class ServicoGrupos implements Persistivel {
 
     private List<Grupo> grupos = new ArrayList<>();
@@ -58,6 +61,7 @@ public class ServicoGrupos implements Persistivel {
         Grupo novo = new Grupo(nome, senha);
         grupos.add(novo);
         holder.setGrupoSelecionadoId(novo.getId());
+        salvar();
         return novo;
     }
 
@@ -107,6 +111,7 @@ public class ServicoGrupos implements Persistivel {
         if (selecionado != null && selecionado.equals(id)) {
             holder.clear();
         }
+        salvar();
     }
 
     /**
@@ -156,6 +161,7 @@ public class ServicoGrupos implements Persistivel {
         }
         
         grupo.pontuar(pessoa, evento);
+        salvar();
     }
 
     @Override
@@ -175,6 +181,7 @@ public class ServicoGrupos implements Persistivel {
     }
 
     @Override
+    @PostConstruct
     /**
      * Recupera a lista de grupos do arquivo grupos.json, se ele existir
      */

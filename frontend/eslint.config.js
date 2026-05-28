@@ -3,6 +3,8 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import axios from 'axios';
+const api = axios.create({ baseURL: 'http://localhost:8080' });
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -19,3 +21,5 @@ export default defineConfig([
     },
   },
 ])
+
+

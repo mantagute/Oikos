@@ -2,9 +2,12 @@ package oikos.util;
 
 import java.util.UUID;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Classe utilitária que mantém, em memória, o UUID do "grupo ativo".
  */
+@Component
 public class HolderGrupoSelecionado {
 
     /** UUID do grupo atualmente selecionado, ou {@code null} se nenhum estiver ativo. */
