@@ -164,6 +164,27 @@ public class ServicoGrupos implements Persistivel {
         salvar();
     }
 
+    /**
+     * Redefine a meta de pontos de um grupo específico.
+     *
+     * @param id       identificador do grupo
+     * @param novaMeta novo valor da meta
+     * @return o {@link Grupo} atualizado
+     * @throws IllegalArgumentException se a meta for menor ou igual a zero
+     * @throws NoSuchElementException   se o grupo não for encontrado
+     */
+    public Grupo redefinirMeta(UUID id, int novaMeta) {
+        if (novaMeta <= 0) {
+            throw new IllegalArgumentException("Meta deve ser maior que zero");
+        }
+
+        Grupo grupo = getGrupoPorId(id);
+        grupo.redefinirMeta(novaMeta);
+        salvar();
+
+        return grupo;
+    }
+
     @Override
     /**
      * Salva a lista de grupos em um arquivo json, com o nome grupos.json
