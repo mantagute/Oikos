@@ -32,3 +32,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local persistence data
+grupos.json
+**/grupos.json
