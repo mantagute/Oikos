@@ -4,7 +4,6 @@ import oikos.domain.model.Grupo;
 import oikos.domain.model.Pessoa;
 import oikos.domain.interfaces.Persistivel;
 import oikos.domain.model.Evento;
-import oikos.util.HolderGrupoSelecionado;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,27 +14,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.io.File;
+import org.springframework.stereotype.Service;
+import jakarta.annotation.PostConstruct;
 
 /**
  * Serviço que gerencia os grupos em memória.
  * <p>
- * Responsável por criar, listar, buscar e excluir grupos,
- * além de controlar qual grupo está ativo via {@link HolderGrupoSelecionado}.
+ * Responsável por criar, listar, buscar e excluir grupos.
  * </p>
  */
+@Service
 public class ServicoGrupos implements Persistivel {
 
     private List<Grupo> grupos = new ArrayList<>();
-    private final HolderGrupoSelecionado holder;
-
-    public ServicoGrupos(HolderGrupoSelecionado holder) {
-        this.holder = holder;
-    }
 
     /**
      * Cria um novo grupo e o adiciona à lista em memória.
      * Valida que nome e senha não sejam vazios e que o nome não esteja duplicado.
-     * O grupo recém-criado é automaticamente marcado como ativo.
      *
      * @param nome  nome do grupo (não pode ser vazio, deve ser único)
      * @param senha senha do grupo (não pode ser vazia)
@@ -57,7 +52,7 @@ public class ServicoGrupos implements Persistivel {
 
         Grupo novo = new Grupo(nome, senha);
         grupos.add(novo);
-        holder.setGrupoSelecionadoId(novo.getId());
+        salvar();
         return novo;
     }
 
@@ -88,7 +83,6 @@ public class ServicoGrupos implements Persistivel {
 
     /**
      * Exclui um grupo após validar a senha informada.
-     * Se o grupo excluído era o ativo, a seleção é limpa.
      *
      * @param id    identificador do grupo a excluir
      * @param senha senha para autorizar a exclusão
@@ -102,60 +96,54 @@ public class ServicoGrupos implements Persistivel {
         }
 
         grupos.remove(grupo);
-
-        UUID selecionado = holder.getGrupoSelecionadoId();
-        if (selecionado != null && selecionado.equals(id)) {
-            holder.clear();
-        }
-    }
-
-    /**
-     * Define qual grupo está ativo.
-     * Valida a existência do grupo antes de marcar como selecionado.
-     *
-     * @param id identificador do grupo a selecionar
-     * @throws NoSuchElementException se o grupo não for encontrado
-     */
-    public void selecionarGrupo(UUID id) {
-        getGrupoPorId(id);
-        holder.setGrupoSelecionadoId(id);
-    }
-
-    /**
-     * Retorna o grupo atualmente selecionado.
-     *
-     * @return o {@link Grupo} ativo
-     * @throws NoSuchElementException se nenhum grupo estiver selecionado ou o ID
-     *                                não existir
-     */
-    public Grupo getGrupoSelecionado() {
-        UUID id = holder.getGrupoSelecionadoId();
-        return getGrupoPorId(id);
+        salvar();
     }
 
     /**
      * Registra a realização de uma atividade por uma pessoa em um evento,
-     * delegando a lógica de pontuação ao grupo atualmente selecionado.
+     * pontuando o grupo especificado.
      *
+     * @param grupoId  identificador do grupo
      * @param pessoaId identificador da pessoa que realizou a atividade
      * @param eventoId identificador do evento realizado
-     * @throws IllegalArgumentException se a pessoa ou evento não pertencerem ao
-     *                                  grupo ativo
-     * @throws NoSuchElementException   se nenhum grupo estiver selecionado
+     * @throws IllegalArgumentException se a pessoa ou evento não pertencerem ao grupo
+     * @throws NoSuchElementException   se o grupo não for encontrado
      */
-    public void pontuar(UUID pessoaId, UUID eventoId) {
-        Grupo grupo = getGrupoSelecionado();
+    public void pontuar(UUID grupoId, UUID pessoaId, UUID eventoId) {
+        Grupo grupo = getGrupoPorId(grupoId);
         Pessoa pessoa = grupo.getGerenciadorPessoas().getPorId(pessoaId);
         if (pessoa == null) {
-            throw new IllegalArgumentException("Pessoa não encontrada no grupo ativo");
+            throw new IllegalArgumentException("Pessoa não encontrada no grupo");
         }
         
         Evento evento = grupo.getGerenciadorEventos().getPorId(eventoId);
         if (evento == null) {
-            throw new IllegalArgumentException("Evento não encontrado no grupo ativo");
+            throw new IllegalArgumentException("Evento não encontrado no grupo");
         }
         
         grupo.pontuar(pessoa, evento);
+        salvar();
+    }
+
+    /**
+     * Redefine a meta de pontos de um grupo específico.
+     *
+     * @param id       identificador do grupo
+     * @param novaMeta novo valor da meta
+     * @return o {@link Grupo} atualizado
+     * @throws IllegalArgumentException se a meta for menor ou igual a zero
+     * @throws NoSuchElementException   se o grupo não for encontrado
+     */
+    public Grupo redefinirMeta(UUID id, int novaMeta) {
+        if (novaMeta <= 0) {
+            throw new IllegalArgumentException("Meta deve ser maior que zero");
+        }
+
+        Grupo grupo = getGrupoPorId(id);
+        grupo.redefinirMeta(novaMeta);
+        salvar();
+
+        return grupo;
     }
 
     @Override
@@ -175,6 +163,7 @@ public class ServicoGrupos implements Persistivel {
     }
 
     @Override
+    @PostConstruct
     /**
      * Recupera a lista de grupos do arquivo grupos.json, se ele existir
      */
