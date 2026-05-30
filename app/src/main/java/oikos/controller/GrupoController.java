@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import oikos.api.grupo.CriarGrupoRequest;
 import oikos.api.grupo.ExcluirGrupoRequest;
 import oikos.api.grupo.GrupoResponse;
+import oikos.api.grupo.PontuarRequest;
 import oikos.api.grupo.RedefinirMetaRequest;
 import oikos.domain.model.Grupo;
 import oikos.service.ServicoGrupos;
@@ -81,5 +82,15 @@ public class GrupoController {
         GrupoResponse response = GrupoResponse.from(grupoAtualizado);
 
         return response;
+    }
+
+    @PostMapping("/{id}/pontuar")
+    public ResponseEntity<Void> pontuar(@PathVariable UUID id, @RequestBody PontuarRequest request) {
+        UUID pessoaId = request.pessoaId();
+        UUID eventoId = request.eventoId();
+
+        servicoGrupos.pontuar(id, pessoaId, eventoId);
+
+        return ResponseEntity.noContent().build();
     }
 }
