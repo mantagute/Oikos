@@ -4,17 +4,22 @@
 }
 
 #grupos {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-top: 40px;
 }
 
 #criar {
-  display: inline-block;
+  display: flex;
   justify-content: center;
   padding: 15px 15px;
   border-radius: 15px;
   border: 1px solid gray;
-  
+  background-color: lightgray;
+  width: fit-content;
+  gap: 10px;
 
   .entrada {
     border-radius: 30px;
@@ -27,5 +32,41 @@
   }
   .criarButton:hover {
     background-color: darkgray;
+  }
+}
+
+#lista {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+
+  .grupo {
+    display: flex;
+    justify-content: center;
+    padding: 15px 15px;
+    border-radius: 15px;
+    border: 1px solid gray;
+    width: fit-content;
+    gap: 10px;
+
+    .nome {
+      padding: 15px 15px;
+      border-radius: 15px;
+      border: 1px solid gray;
+    }
+    .entrada {
+      border-radius: 30px;
+      padding: 5px 15px;
+    }
+    .entrarButton {
+      border-radius: 30px;
+      font-size: medium;
+      padding: 5px 15px;
+    }
+    .entrarButton:hover {
+      background-color: darkgray;
+    }
   }
 }

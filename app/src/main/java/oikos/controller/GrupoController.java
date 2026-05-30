@@ -1,6 +1,5 @@
 package oikos.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,16 +33,8 @@ public class GrupoController {
     }
 
     @GetMapping
-    public List<GrupoResponse> getListaGrupos() {
-        List<Grupo> grupos = servicoGrupos.getListaGrupos();
-        List<GrupoResponse> responses = new ArrayList<>();
-
-        for (Grupo grupo : grupos) {
-            GrupoResponse response = GrupoResponse.from(grupo);
-            responses.add(response);
-        }
-
-        return responses;
+    public List<Grupo> getListaGrupos() {
+        return servicoGrupos.getListaGrupos();
     }
 
     @PostMapping
