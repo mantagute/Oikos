@@ -19,7 +19,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
     private String senha;
     private Gerenciador<Evento> gerenciadorEventos;
     private Gerenciador<Pessoa> gerenciadorPessoas;
-    private int metaPontos;
+    private int meta;
     private int pontuacaoAtual;
     private int metasBatidas;
     
@@ -35,7 +35,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         this.senha = senha;
         this.gerenciadorEventos = new Gerenciador<>(this);
         this.gerenciadorPessoas = new Gerenciador<>(this);
-        this.metaPontos = 1000; // Meta padrão, pode ser ajustada
+        this.meta = 1000; // Meta padrão, pode ser ajustada
         this.pontuacaoAtual = 0;
         this.metasBatidas = 0;
     }
@@ -44,12 +44,20 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public int getMeta() {
-        return metaPontos;
+        return meta;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public void setMeta(int meta) {
-        this.metaPontos = meta;
+        this.meta = meta;
     }
 
     @Override
@@ -71,8 +79,16 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
         return gerenciadorEventos;
     }
 
+    public void setGerenciadorEventos(Gerenciador<Evento> gerenciadorEventos) {
+        this.gerenciadorEventos = gerenciadorEventos;
+    }
+
     public Gerenciador<Pessoa> getGerenciadorPessoas() {
         return gerenciadorPessoas;
+    }
+
+    public void setGerenciadorPessoas(Gerenciador<Pessoa> gerenciadorPessoas) {
+        this.gerenciadorPessoas = gerenciadorPessoas;
     }
 
     public String getClassificacao() {
@@ -84,7 +100,7 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
      * @param novaMeta Novo valor da meta.
      */
     public void redefinirMeta(int novaMeta) {
-        this.metaPontos = novaMeta;
+        this.meta = novaMeta;
     }
 
     /**
@@ -128,9 +144,9 @@ public class Grupo extends Entidade implements Pontuavel, Autenticavel, Classifi
     @Override
     public void adicionarPontos(int pontos){
         this.pontuacaoAtual = this.pontuacaoAtual + pontos;
-        while (this.pontuacaoAtual >= this.metaPontos) {
+        while (this.pontuacaoAtual >= this.meta) {
             this.metasBatidas++;
-            this.pontuacaoAtual = this.pontuacaoAtual - this.metaPontos;
+            this.pontuacaoAtual = this.pontuacaoAtual - this.meta;
         }
     }
 

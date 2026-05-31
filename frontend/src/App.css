@@ -30,6 +30,7 @@
   border-radius: 30px;
   font-size: medium;
   padding: 5px 15px;
+  cursor: pointer;
 }
 
 #criar .criarButton:hover {
@@ -42,22 +43,22 @@
   justify-content: center;
   align-items: center;
   margin-top: 40px;
+  gap: 10px;
 }
 
 #lista .grupo {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px 15px;
   border-radius: 15px;
   border: 1px solid gray;
-  width: fit-content;
+  width: 100%;
   gap: 10px;
 }
 
 #lista .grupo .nome {
-  padding: 15px 15px;
   border-radius: 15px;
-  border: 1px solid gray;
 }
 
 #lista .grupo .entrada {
@@ -69,6 +70,7 @@
   border-radius: 30px;
   font-size: medium;
   padding: 5px 15px;
+  cursor: pointer;
 }
 
 #lista .grupo .entrarButton:hover {
