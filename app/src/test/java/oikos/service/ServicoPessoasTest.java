@@ -2,7 +2,6 @@ package oikos.service;
 
 import oikos.domain.model.Grupo;
 import oikos.domain.model.Pessoa;
-import oikos.util.HolderGrupoSelecionado;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,54 +19,61 @@ class ServicoPessoasTest {
 
     @BeforeEach
     void setUp() {
-        servicoGrupos = new ServicoGrupos(new HolderGrupoSelecionado());
+        servicoGrupos = new ServicoGruposParaTeste();
         servicoPessoas = new ServicoPessoas(servicoGrupos);
     }
 
     @Test
-    void adicionarComGrupoSelecionadoENomeValidoDeveAdicionarPessoaNoGrupoAtivo() {
+    void adicionarPessoaComNomeCorreto() {
         Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
         
         Pessoa pessoa = new Pessoa("João");
-        servicoPessoas.adicionar(pessoa);
+        servicoPessoas.adicionar(grupo.getId(), pessoa);
         
-        assertEquals(1, servicoPessoas.getLista().size());
-        assertEquals("João", servicoPessoas.getPorId(pessoa.getId()).getNome());
+        assertEquals(1, servicoPessoas.getLista(grupo.getId()).size());
+        assertEquals("João", servicoPessoas.getPorId(grupo.getId(), pessoa.getId()).getNome());
         
         assertEquals(1, grupo.getGerenciadorPessoas().getListaEntidades().size());
     }
 
     @Test
-    void adicionarComNomeVazioDeveLancarExcecao() {
-        servicoGrupos.criarGrupo("Família", "1234");
+    void adicionarComNomeVazioDeveLancaExcecao() {
+        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
         
         Pessoa pessoa = new Pessoa("   ");
-        assertThrows(IllegalArgumentException.class, () -> servicoPessoas.adicionar(pessoa));
+        assertThrows(IllegalArgumentException.class, () -> servicoPessoas.adicionar(grupo.getId(), pessoa));
     }
 
     @Test
-    void operacoesSemGrupoSelecionadoDeveLancarExcecao() {
+    void operacoesSemGrupoLancamExcecao() {
         Pessoa pessoa = new Pessoa("João");
         
-        assertThrows(NoSuchElementException.class, () -> servicoPessoas.adicionar(pessoa));
-        assertThrows(NoSuchElementException.class, () -> servicoPessoas.getLista());
+        assertThrows(NoSuchElementException.class, () -> servicoPessoas.adicionar(null, pessoa));
+        assertThrows(NoSuchElementException.class, () -> servicoPessoas.getLista(null));
     }
 
     @Test
-    void removerPessoaExistenteDeveRemoverDoGrupo() {
-        servicoGrupos.criarGrupo("Família", "1234");
+    void removerPessoaDoGrupo() {
+        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
         Pessoa pessoa = new Pessoa("João");
-        servicoPessoas.adicionar(pessoa);
+        servicoPessoas.adicionar(grupo.getId(), pessoa);
         
-        servicoPessoas.remover(pessoa.getId());
+        servicoPessoas.remover(grupo.getId(), pessoa.getId());
         
-        assertTrue(servicoPessoas.getLista().isEmpty());
+        assertTrue(servicoPessoas.getLista(grupo.getId()).isEmpty());
     }
 
     @Test
-    void removerPessoaInexistenteDeveLancarExcecao() {
-        servicoGrupos.criarGrupo("Família", "1234");
+    void removerPessoaInexistenteLancaExcecao() {
+        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
         
-        assertThrows(NoSuchElementException.class, () -> servicoPessoas.remover(UUID.randomUUID()));
+        assertThrows(NoSuchElementException.class, () -> servicoPessoas.remover(grupo.getId(), UUID.randomUUID()));
+    }
+
+    private static class ServicoGruposParaTeste extends ServicoGrupos {
+        @Override
+        public String salvar() {
+            return "teste";
+        }
     }
 }
