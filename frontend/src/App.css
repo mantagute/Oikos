@@ -1,31 +1,78 @@
 #titulo {
   margin-top: 10px;
-
 }
 
 #grupos {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-top: 40px;
 }
 
 #criar {
-  display: inline-block;
+  display: flex;
   justify-content: center;
   padding: 15px 15px;
   border-radius: 15px;
   border: 1px solid gray;
-  
+  background-color: lightgray;
+  width: fit-content;
+  gap: 10px;
+}
 
-  .entrada {
-    border-radius: 30px;
-    padding: 5px 15px;
-  }
-  .criarButton {
-    border-radius: 30px;
-    font-size: medium;
-    padding: 5px 15px;
-  }
-  .criarButton:hover {
-    background-color: darkgray;
-  }
+#criar .entrada {
+  border-radius: 30px;
+  padding: 5px 15px;
+}
+
+#criar .criarButton {
+  border-radius: 30px;
+  font-size: medium;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+#criar .criarButton:hover {
+  background-color: darkgray;
+}
+
+#lista {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  gap: 10px;
+}
+
+#lista .grupo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 15px;
+  border-radius: 15px;
+  border: 1px solid gray;
+  width: 100%;
+  gap: 10px;
+}
+
+#lista .grupo .nome {
+  border-radius: 15px;
+}
+
+#lista .grupo .entrada {
+  border-radius: 30px;
+  padding: 5px 15px;
+}
+
+#lista .grupo .entrarButton {
+  border-radius: 30px;
+  font-size: medium;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+#lista .grupo .entrarButton:hover {
+  background-color: darkgray;
 }

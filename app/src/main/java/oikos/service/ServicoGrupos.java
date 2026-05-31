@@ -1,21 +1,23 @@
 package oikos.service;
 
-import oikos.domain.model.Grupo;
-import oikos.domain.model.Pessoa;
-import oikos.domain.interfaces.Persistivel;
-import oikos.domain.model.Evento;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
-import java.io.IOException;
-import java.io.File;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.annotation.PostConstruct;
+import oikos.domain.interfaces.Persistivel;
+import oikos.domain.model.Evento;
+import oikos.domain.model.Grupo;
+import oikos.domain.model.Pessoa;
 
 /**
  * Serviço que gerencia os grupos em memória.
@@ -155,6 +157,7 @@ public class ServicoGrupos implements Persistivel {
     public String salvar() {
         ObjectMapper mapper = new ObjectMapper();
         try {
+            System.out.println("Salvando grupos em: " + new File("grupos.json").getAbsolutePath());
             mapper.writeValue(new File("grupos.json"), this.grupos);
             return "grupos.json";
         } catch (IOException e) {
@@ -169,23 +172,30 @@ public class ServicoGrupos implements Persistivel {
      */
     public void recuperar() {
         File arquivo = new File("grupos.json");
-        if (!arquivo.exists()) {
+        // Verifica se o arquivo existe e se não está vazio (tamanho 0 causa erro no Jackson)
+        if (!arquivo.exists() || arquivo.length() == 0) {
+            System.out.println("Arquivo de dados não encontrado ou vazio em: " + arquivo.getAbsolutePath());
             this.grupos = new ArrayList<>();
             return;
         }
 
+        System.out.println("Carregando dados de: " + arquivo.getAbsolutePath());
         ObjectMapper mapper = new ObjectMapper();
+        // Evita que o sistema quebre se o JSON tiver campos extras (como o ID que o Jackson pode ter dificuldade de mapear)
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
-            this.grupos = mapper.readValue(arquivo, new TypeReference<List<Grupo>>() {
-            });
-            
-            for (Grupo grupo : this.grupos) {
-                grupo.getGerenciadorEventos().setGrupoOrigem(grupo);
-                grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
+            List<Grupo> carregados = mapper.readValue(arquivo, new TypeReference<List<Grupo>>() {});
+            if (carregados != null) {
+                this.grupos = carregados;
+                for (Grupo grupo : this.grupos) {
+                    // Garante que o back-reference seja restaurado apenas se o objeto existir
+                    if (grupo.getGerenciadorEventos() != null) grupo.getGerenciadorEventos().setGrupoOrigem(grupo);
+                    if (grupo.getGerenciadorPessoas() != null) grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
+                }
             }
-            
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao recuperar os grupos do arquivo JSON", e);
+            e.printStackTrace(); 
+            this.grupos = new ArrayList<>();
         }
     }
 }
