@@ -1,7 +1,5 @@
 package oikos.service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,14 +8,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
 import oikos.domain.interfaces.Persistivel;
 import oikos.domain.model.Evento;
 import oikos.domain.model.Grupo;
 import oikos.domain.model.Pessoa;
+import oikos.persistence.PersistenciaJson;
 
 /**
  * Serviço que gerencia os grupos em memória.
@@ -26,9 +23,18 @@ import oikos.domain.model.Pessoa;
  * </p>
  */
 @Service
-public class ServicoGrupos implements Persistivel {
+public class ServicoGrupos {
 
     private List<Grupo> grupos = new ArrayList<>();
+    private final Persistivel<List<Grupo>> persistencia;
+
+    public ServicoGrupos() {
+        this(new PersistenciaJson<>("../data/grupos.json", new TypeReference<List<Grupo>>() {}, () -> new ArrayList<>()));
+    }
+
+    public ServicoGrupos(Persistivel<List<Grupo>> persistencia) {
+        this.persistencia = persistencia;
+    }
 
     /**
      * Cria um novo grupo e o adiciona à lista em memória.
@@ -148,54 +154,28 @@ public class ServicoGrupos implements Persistivel {
         return grupo;
     }
 
-    @Override
     /**
-     * Salva a lista de grupos em um arquivo json, com o nome grupos.json
-     * 
-     * @return String o nome do arquivo gerado, que por padrão é grupos.json
+     * Salva a lista de grupos em um arquivo json, com o nome data/grupos.json
+     *
+     * @return String o nome do arquivo gerado
      */
     public String salvar() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            System.out.println("Salvando grupos em: " + new File("grupos.json").getAbsolutePath());
-            mapper.writeValue(new File("grupos.json"), this.grupos);
-            return "grupos.json";
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar os grupos em um arquivo JSON", e);
-        }
+        return persistencia.salvar(this.grupos);
     }
 
-    @Override
     @PostConstruct
     /**
-     * Recupera a lista de grupos do arquivo grupos.json, se ele existir
+     * Recupera a lista de grupos do arquivo data/grupos.json, se ele existir
      */
     public void recuperar() {
-        File arquivo = new File("grupos.json");
-        // Verifica se o arquivo existe e se não está vazio (tamanho 0 causa erro no Jackson)
-        if (!arquivo.exists() || arquivo.length() == 0) {
-            System.out.println("Arquivo de dados não encontrado ou vazio em: " + arquivo.getAbsolutePath());
-            this.grupos = new ArrayList<>();
-            return;
-        }
-
-        System.out.println("Carregando dados de: " + arquivo.getAbsolutePath());
-        ObjectMapper mapper = new ObjectMapper();
-        // Evita que o sistema quebre se o JSON tiver campos extras (como o ID que o Jackson pode ter dificuldade de mapear)
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        try {
-            List<Grupo> carregados = mapper.readValue(arquivo, new TypeReference<List<Grupo>>() {});
-            if (carregados != null) {
-                this.grupos = carregados;
-                for (Grupo grupo : this.grupos) {
-                    // Garante que o back-reference seja restaurado apenas se o objeto existir
-                    if (grupo.getGerenciadorEventos() != null) grupo.getGerenciadorEventos().setGrupoOrigem(grupo);
-                    if (grupo.getGerenciadorPessoas() != null) grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
-                }
+        this.grupos = persistencia.recuperar();
+        for (Grupo grupo : this.grupos) {
+            if (grupo.getGerenciadorEventos() != null) {
+                grupo.getGerenciadorEventos().setGrupoOrigem(grupo);
             }
-        } catch (IOException e) {
-            e.printStackTrace(); 
-            this.grupos = new ArrayList<>();
+            if (grupo.getGerenciadorPessoas() != null) {
+                grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
+            }
         }
     }
 }
