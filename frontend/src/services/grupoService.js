@@ -27,6 +27,11 @@ const grupoService = {
     });
     return response.data;
   },
+
+  autenticarSenhaGrupo: async (grupoId, senhaIn) => {
+    const response = await api.get(`/grupos/${grupoId}/${senhaIn}`);
+    return response.data;
+  },
 };
 
 export default grupoService;

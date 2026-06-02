@@ -65,6 +65,12 @@ public class GrupoController {
         return response;
     }
 
+    @GetMapping("/{id}/{senhaIn}")
+    public boolean autenticarSenhaGrupo(@PathVariable UUID id, @PathVariable String senhaIn) {
+        Grupo grupoEncontrado = servicoGrupos.getGrupoPorId(id);
+        return grupoEncontrado.autenticarSenha(senhaIn);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirGrupo(@PathVariable UUID id, @RequestBody ExcluirGrupoRequest request) {
         String senha = request.senha();

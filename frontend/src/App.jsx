@@ -7,7 +7,7 @@ function App() {
   const [grupos, setGrupos] = useState([]);
   const [novoNome, setNovoNome] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
-  const [senhasEntrada, setSenhasEntrada] = useState({});
+  const [senhasIn, setSenhasIn] = useState({}); // Alterado para objeto
 
   useEffect(() => {
     const carregarGrupos = async () => {
@@ -23,17 +23,35 @@ function App() {
   }, [atualizador]);
 
   const lidarComCriarGrupo = async () => {
-    if (!novoNome.trim()) return alert("Digite um nome para o grupo!");
+    if (!novoNome.trim()) return alert('Digite um nome para o grupo');
+    if (novoNome.trim() && !novaSenha.trim()) return alert("Digite uma senha para o grupo")
 
     try {
       await grupoService.criarGrupo(novoNome, novaSenha);
-      
-      setNovoNome("");
-      setNovaSenha("");
-      
-      setAtualizador(prev => prev + 1);
+
+      setNovoNome('');
+      setNovaSenha('');
+
+      setAtualizador((prev) => prev + 1);
     } catch (error) {
       console.error('Erro ao criar grupo:', error);
+    }
+  };
+
+  const lidarEntrar = async (grupoId) => {
+    const senha = senhasIn[grupoId];
+    if (!senha || !senha.trim()) return alert('Digite a senha do grupo');
+
+    try {
+      const resposta = await grupoService.autenticarSenhaGrupo(grupoId, senha);
+
+      if (resposta === true) alert('Senha correta');
+      else alert('Senha incorreta');
+
+      setSenhasIn((prev) => ({ ...prev, [grupoId]: '' }));
+    } catch (error) {
+      console.error('Erro ao autenticar senha:', error);
+      alert('Erro ao verificar senha.');
     }
   };
 
@@ -52,14 +70,14 @@ function App() {
             className="entrada"
             type="text"
             placeholder="+ Nome do novo grupo"
-            value={novoNome} 
+            value={novoNome}
             onChange={(e) => setNovoNome(e.target.value)}
           />
           <input
             className="entrada"
             type="text"
             placeholder="+ Senha do novo grupo"
-            value={novaSenha} 
+            value={novaSenha}
             onChange={(e) => setNovaSenha(e.target.value)}
           />
           <button className="criarButton" onClick={lidarComCriarGrupo}>
@@ -75,8 +93,15 @@ function App() {
                 className="entrada"
                 type="text"
                 placeholder="Digite a senha para entrar"
+                value={senhasIn[grupo.id] || ''}
+                onChange={(e) =>
+                  setSenhasIn({ ...senhasIn, [grupo.id]: e.target.value })
+                }
               />
-              <button className="entrarButton" onClick={() => {}}>
+              <button
+                className="entrarButton"
+                onClick={() => lidarEntrar(grupo.id)}
+              >
                 Entrar
               </button>
             </div>
