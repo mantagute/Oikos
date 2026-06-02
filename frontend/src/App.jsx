@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import grupoService from './services/grupoService';
+import { BsTrash3 } from "react-icons/bs";
 
 function App() {
   const [atualizador, setAtualizador] = useState(0);
@@ -23,11 +24,12 @@ function App() {
   }, [atualizador]);
 
   const lidarComCriarGrupo = async () => {
-    if (!novoNome.trim()) return alert('Digite um nome para o grupo');
-    if (novoNome.trim() && !novaSenha.trim()) return alert("Digite uma senha para o grupo")
+    if (!novoNome.trim()) return alert('Digite um nome para o novo grupo');
+    if (novoNome.trim() && !novaSenha.trim()) return alert("Digite uma senha para o novo grupo")
 
     try {
       await grupoService.criarGrupo(novoNome, novaSenha);
+      alert(`Grupo ${novoNome} criado`)
 
       setNovoNome('');
       setNovaSenha('');
@@ -54,6 +56,27 @@ function App() {
       alert('Erro ao verificar senha.');
     }
   };
+
+  const lidarDeletar = async (grupoId, nomeGrupo) => {
+    const senha = senhasIn[grupoId];
+    if (!senha || !senha.trim()) return alert('Digite a senha do grupo para excluí-lo');
+
+    try {
+      const resposta = await grupoService.autenticarSenhaGrupo(grupoId, senha);
+
+      if (resposta === true) {
+        grupoService.excluirGrupo(grupoId, senha);
+        alert(`Grupo ${nomeGrupo} excluído`)
+      }
+      else alert('Senha incorreta');
+
+      setAtualizador((prev) => prev + 1);
+      setSenhasIn((prev) => ({ ...prev, [grupoId]: '' }));
+    } catch (error) {
+      console.error('Erro ao autenticar senha:', error);
+      alert('Erro ao verificar senha.');
+    }
+  }
 
   return (
     <div className="app-main">
@@ -103,6 +126,9 @@ function App() {
                 onClick={() => lidarEntrar(grupo.id)}
               >
                 Entrar
+              </button>
+              <button className='deletarButton' onClick={() => lidarDeletar(grupo.id, grupo.nome)}>
+                <BsTrash3 className='deletarSimbolo'/>
               </button>
             </div>
           ))}

@@ -64,6 +64,7 @@
 #lista .grupo .entrada {
   border-radius: 30px;
   padding: 5px 15px;
+  width: 155px;
 }
 
 #lista .grupo .entrarButton {
@@ -76,3 +77,23 @@
 #lista .grupo .entrarButton:hover {
   background-color: darkgray;
 }
+
+#lista .grupo .deletarButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#lista .grupo .deletarSimbolo {
+  color: black;
+  margin: 5px;
+  font-size: large;
+}
+
+#lista .grupo .deletarSimbolo:hover {
+  background-color: darkgray;
+  border-radius: 50%;
+  padding: 5px;
+  margin: 0px;
+}
+
