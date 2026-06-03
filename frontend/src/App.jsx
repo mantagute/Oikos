@@ -32,7 +32,6 @@ function App() {
 
     try {
       await grupoService.criarGrupo(novoNome, novaSenha);
-      alert(`Grupo ${novoNome} criado`);
 
       setNovoNome('');
       setNovaSenha('');
@@ -63,7 +62,7 @@ function App() {
     }
   };
 
-  const lidarDeletar = async (grupoId, nomeGrupo) => {
+  const lidarDeletar = async (grupoId) => {
     const senha = senhasIn[grupoId];
     if (!senha || !senha.trim())
       return alert('Digite a senha do grupo para excluí-lo');
@@ -73,7 +72,6 @@ function App() {
 
       if (resposta === true) {
         grupoService.excluirGrupo(grupoId, senha);
-        alert(`Grupo ${nomeGrupo} excluído`);
       } else alert('Senha incorreta');
 
       setAtualizador((prev) => prev + 1);
@@ -138,12 +136,12 @@ function App() {
               <button
                 className="entrarButton"
                 onClick={() => lidarEntrar(grupo.id)}
-              >
+              > 
                 Entrar
               </button>
               <button
                 className="deletarButton"
-                onClick={() => lidarDeletar(grupo.id, grupo.nome)}
+                onClick={() => lidarDeletar(grupo.id)}
               >
                 <BsTrash3 className="deletarSimbolo" />
               </button>
