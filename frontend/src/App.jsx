@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import grupoService from './services/grupoService';
-import { BsTrash3 } from "react-icons/bs";
+import { BsTrash3 } from 'react-icons/bs';
+import PaginaGrupo from './components/PaginaGrupo';
 
 function App() {
   const [atualizador, setAtualizador] = useState(0);
   const [grupos, setGrupos] = useState([]);
+  const [grupoAtivo, setGrupoAtivo] = useState(null); // Estado para o grupo selecionado
   const [novoNome, setNovoNome] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [senhasIn, setSenhasIn] = useState({}); // Alterado para objeto
@@ -25,11 +27,12 @@ function App() {
 
   const lidarComCriarGrupo = async () => {
     if (!novoNome.trim()) return alert('Digite um nome para o novo grupo');
-    if (novoNome.trim() && !novaSenha.trim()) return alert("Digite uma senha para o novo grupo")
+    if (novoNome.trim() && !novaSenha.trim())
+      return alert('Digite uma senha para o novo grupo');
 
     try {
       await grupoService.criarGrupo(novoNome, novaSenha);
-      alert(`Grupo ${novoNome} criado`)
+      alert(`Grupo ${novoNome} criado`);
 
       setNovoNome('');
       setNovaSenha('');
@@ -47,8 +50,11 @@ function App() {
     try {
       const resposta = await grupoService.autenticarSenhaGrupo(grupoId, senha);
 
-      if (resposta === true) alert('Senha correta');
-      else alert('Senha incorreta');
+      if (resposta === true) {
+        // Se a senha estiver correta, define o grupo ativo
+        const grupo = grupos.find((g) => g.id === grupoId);
+        setGrupoAtivo(grupo);
+      } else alert('Senha incorreta');
 
       setSenhasIn((prev) => ({ ...prev, [grupoId]: '' }));
     } catch (error) {
@@ -59,16 +65,16 @@ function App() {
 
   const lidarDeletar = async (grupoId, nomeGrupo) => {
     const senha = senhasIn[grupoId];
-    if (!senha || !senha.trim()) return alert('Digite a senha do grupo para excluí-lo');
+    if (!senha || !senha.trim())
+      return alert('Digite a senha do grupo para excluí-lo');
 
     try {
       const resposta = await grupoService.autenticarSenhaGrupo(grupoId, senha);
 
       if (resposta === true) {
         grupoService.excluirGrupo(grupoId, senha);
-        alert(`Grupo ${nomeGrupo} excluído`)
-      }
-      else alert('Senha incorreta');
+        alert(`Grupo ${nomeGrupo} excluído`);
+      } else alert('Senha incorreta');
 
       setAtualizador((prev) => prev + 1);
       setSenhasIn((prev) => ({ ...prev, [grupoId]: '' }));
@@ -76,8 +82,16 @@ function App() {
       console.error('Erro ao autenticar senha:', error);
       alert('Erro ao verificar senha.');
     }
+  };
+
+  // Se houver um grupo ativo, renderiza a "página" do grupo
+  if (grupoAtivo) {
+    return (
+      <PaginaGrupo aoSair={() => setGrupoAtivo(null)}/>
+    );
   }
 
+  // Caso contrário, renderiza a lista inicial
   return (
     <div className="app-main">
       <header id="titulo">
@@ -127,8 +141,11 @@ function App() {
               >
                 Entrar
               </button>
-              <button className='deletarButton' onClick={() => lidarDeletar(grupo.id, grupo.nome)}>
-                <BsTrash3 className='deletarSimbolo'/>
+              <button
+                className="deletarButton"
+                onClick={() => lidarDeletar(grupo.id, grupo.nome)}
+              >
+                <BsTrash3 className="deletarSimbolo" />
               </button>
             </div>
           ))}

@@ -1,0 +1,29 @@
+#corpo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#header {
+  background-color: darkgray;
+}
+
+#sairButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#sairButton:hover {
+  text-decoration: underline;
+}
+
+#perfil {
+  margin-top: 5%;
+  
+}
+
+#caixaMeta {
+  margin-top: 5%;
+}
+
