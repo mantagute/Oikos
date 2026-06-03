@@ -27,3 +27,26 @@
   margin-top: 5%;
 }
 
+#caixaPontuar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+#criar .entrada {
+  border-radius: 30px;
+  padding: 5px 15px;
+}
+
+#criar .criarButton {
+  border-radius: 30px;
+  font-size: medium;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+#criar .criarButton:hover {
+  background-color: darkgray;
+}

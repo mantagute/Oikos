@@ -32,6 +32,11 @@ const grupoService = {
     const response = await api.get(`/grupos/${grupoId}/${senhaIn}`);
     return response.data;
   },
+
+  getClassificacaoGrupo: async (grupoId) => {
+    const response = await api.get(`/${grupoId}/classificar`)
+    return response.data;
+  }
 };
 
 export default grupoService;

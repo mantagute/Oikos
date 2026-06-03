@@ -87,7 +87,7 @@ function App() {
   // Se houver um grupo ativo, renderiza a "página" do grupo
   if (grupoAtivo) {
     return (
-      <PaginaGrupo aoSair={() => setGrupoAtivo(null)}/>
+      <PaginaGrupo grupo={grupoAtivo} aoSair={() => setGrupoAtivo(null)}/>
     );
   }
 

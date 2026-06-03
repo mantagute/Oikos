@@ -99,4 +99,9 @@ public class GrupoController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/classificar")
+    public String getClassificacaoGrupo(@PathVariable UUID id) {
+        return servicoGrupos.getGrupoPorId(id).getClassificacao();
+    }
 }
