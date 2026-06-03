@@ -19,4 +19,6 @@ public interface Classificavel {
         else if (metasBatidas >= 1) {return "Bronze";}
         else {return "Iniciante";}
     }
+
+    public String getClassificacao();
 }

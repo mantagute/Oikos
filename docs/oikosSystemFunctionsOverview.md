@@ -15,6 +15,8 @@ O Oikos é uma plataforma de acompanhamento coletivo de hábitos para grupos rel
 
 Este documento apresenta o levantamento detalhado das funções internas do sistema, alinhado à proposta da Atividade 1 e à modelagem definida no diagrama UML (Atividade 3), utilizando exatamente os nomes das classes, interfaces, atributos e métodos adotados no projeto.
 
+O escopo deste levantamento e do diagrama UML associado concentra-se na parte interna do backend: domínio, serviços, gerenciamento e persistência. A camada de API REST não faz parte deste recorte, portanto controllers, requisição/resposta, tratamento de exceções da API, configuração web e a classe de inicialização da aplicação não são detalhados neste documento.
+
 ## 2. Visão funcional do sistema
 
 O sistema deve permitir:

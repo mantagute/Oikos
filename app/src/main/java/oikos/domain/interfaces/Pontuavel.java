@@ -24,4 +24,6 @@ public interface Pontuavel {
      * Reinicia a pontuação, zerando todos os pontos acumulados.
      */
     void reiniciarPontos();
+
+    void setPontuacaoAtual(int valor);
 }
