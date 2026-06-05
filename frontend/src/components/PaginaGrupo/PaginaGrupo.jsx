@@ -92,8 +92,8 @@ function PaginaGrupo() {
           <h3 className="pagina-grupo-categoria">categoria: {grupo.classificacao}</h3>
         </div>
         <div className="pagina-grupo-pontuar">
-          <select onChange={(e) => setPessoa(e.target.value)} value={pessoaSelecionada || ''}>
-            <option value="">Selecione uma pessoa...</option>
+          <select className="inputPontuar" onChange={(e) => setPessoa(e.target.value)} value={pessoaSelecionada || ''}>
+            <option value="">Selecione uma pessoa</option>
             {pessoas.map((pessoa) => (
               <option key={pessoa.id} value={pessoa.id}>
                 {pessoa.nome}
@@ -101,8 +101,8 @@ function PaginaGrupo() {
             ))}
           </select>
     
-          <select onChange={(e) => setEvento(e.target.value)} value={eventoSelecionado || ''}>
-            <option value="">Selecione um evento...</option>
+          <select className="inputPontuar" onChange={(e) => setEvento(e.target.value)} value={eventoSelecionado || ''}>
+            <option value="">Selecione um evento</option>
             {eventos.map((evento) => (
               <option key={evento.id} value={evento.id}>
                 {evento.nome}
@@ -110,7 +110,7 @@ function PaginaGrupo() {
             ))}
           </select>
     
-          <button onClick={lidarPontuar}>Pontuar</button>
+          <button className='pontuar-button' onClick={lidarPontuar}>Pontuar</button>
         </div>
       </div>
       <GerenciadorPessoas grupoId={id} pessoas={pessoas} onAtualizarPessoas={onAtualizarPessoas} />

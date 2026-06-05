@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import pessoaService  from '../../services/pessoaService';
+import './GerenciadorPessoas.css';
 
 function GerenciadorPessoas({grupoId, pessoas, onAtualizarPessoas }) {
     const [novoNome, setNovoNome] = useState('');
@@ -28,23 +29,26 @@ function GerenciadorPessoas({grupoId, pessoas, onAtualizarPessoas }) {
     }
 
     return (
-        <div className=''>
-            <h3>Pessoas</h3>
-            <ul>
+        <div className='gerenciador-pessoas'>
+            <h2>Pessoas</h2>
+            <ul className='lista-pessoa'>
                 {pessoas.map((pessoa) => (
-                    <li key={pessoa.id}>
+                    <li className='pessoa' key={pessoa.id}>
                         {pessoa.nome}
-                        <button onClick={() => lidarExcluirPessoa(pessoa.id)}>Excluir</button>
+                        <button className='excluir-button' onClick={() => lidarExcluirPessoa(pessoa.id)}>Excluir</button>
                     </li>
                 ))}
             </ul>
-            <input 
-                type="text"
-                placeholder="Nome da nova pessoa"
-                value={novoNome}
-                onChange={(e) => setNovoNome(e.target.value)}
-            />
-            <button onClick={lidarCriarPessoa}>Adicionar Pessoa</button> 
+            <div className='caixa-criar-pessoa'>
+                <input 
+                    className='input-nova-pessoa'
+                    type="text"
+                    placeholder="Nome da nova pessoa"
+                    value={novoNome}
+                    onChange={(e) => setNovoNome(e.target.value)}
+                />
+                <button className="criar-button" onClick={lidarCriarPessoa}>Adicionar Pessoa</button> 
+            </div>
         </div>
     );
 }

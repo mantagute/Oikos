@@ -1,0 +1,42 @@
+.gerenciador-pessoas {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.excluir-button {
+  margin-left: 15px;
+  font-size: x-small;
+  border-radius: 30px;
+  border-width: 1px;
+  border-color: black;
+  padding: 3px 9px;
+  cursor: pointer;
+}
+
+.excluir-button:hover {
+  background-color: darkgray;
+}
+
+.input-nova-pessoa {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-width: 1px;
+  border-color: black;
+  padding: 3px 9px;
+}
+
+.criar-button {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-width: 1px;
+  border-color: black;
+  padding: 3px 20px;
+  cursor: pointer;
+}
+
+.criar-button:hover {
+  background-color: darkgray;
+}

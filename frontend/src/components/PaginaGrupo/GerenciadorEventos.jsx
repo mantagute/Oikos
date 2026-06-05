@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import eventoService  from '../../services/eventoService';
+import './GerenciadorEventos.css';
 
 function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
     const [novoNome, setNovoNome] = useState('');
@@ -30,29 +31,33 @@ function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
     }
 
     return (
-        <div className=''>
-            <h3>Eventos</h3>
+        <div className='gerenciador-eventos'>
+            <h2>Eventos</h2>
             <ul>
                 {eventos.map((evento) => (
                     <li key={evento.id}>
                         {evento.nome}
-                        <button onClick={() => lidarExcluirEvento(evento.id)}>Excluir</button>
+                        <button className='excluir-button' onClick={() => lidarExcluirEvento(evento.id)}>Excluir</button>
                     </li>
                 ))}
             </ul>
-            <input 
-                type="text"
-                placeholder="Nome da nova evento"
-                value={novoNome}
-                onChange={(e) => setNovoNome(e.target.value)}
-            />
-            <input 
-                type="number"
-                placeholder="Pontos associados ao evento"
-                value={pontos}
-                onChange={(e) => setPontos(e.target.value)}
-            />
-            <button onClick={lidarCriarEvento}>Adicionar Evento</button> 
+            <div className=''>
+                <input 
+                    type="text"
+                    placeholder="Nome do novo evento"
+                    value={novoNome}
+                    onChange={(e) => setNovoNome(e.target.value)}
+                    className='input-novo-evento'
+                />
+                <input 
+                    type="number"
+                    placeholder="Pontos"
+                    value={pontos}
+                    onChange={(e) => setPontos(e.target.value)}
+                    className='input-novo-evento-pontos'
+                />
+                <button className="criar-button" onClick={lidarCriarEvento}>Adicionar Evento</button>
+            </div> 
         </div>
     );
 }
