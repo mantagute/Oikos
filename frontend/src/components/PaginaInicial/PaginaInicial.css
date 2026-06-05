@@ -1,8 +1,8 @@
-#titulo {
+.pagina-inicial-header {
   margin-top: 10px;
 }
 
-#grupos {
+.pagina-inicial-grupos {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,7 +10,7 @@
   margin-top: 40px;
 }
 
-#criar {
+.pagina-inicial-criar {
   display: flex;
   justify-content: center;
   padding: 15px 15px;
@@ -21,23 +21,23 @@
   gap: 10px;
 }
 
-#criar .entrada {
+.pagina-inicial-criar .entrada {
   border-radius: 30px;
   padding: 5px 15px;
 }
 
-#criar .criarButton {
+.pagina-inicial-criar .criar-button {
   border-radius: 30px;
   font-size: medium;
   padding: 5px 15px;
   cursor: pointer;
 }
 
-#criar .criarButton:hover {
+.pagina-inicial-criar .criar-button:hover {
   background-color: darkgray;
 }
 
-#lista {
+.pagina-inicial-lista {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,7 +46,7 @@
   gap: 10px;
 }
 
-#lista .grupo {
+.grupo-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,22 +57,42 @@
   gap: 10px;
 }
 
-#lista .grupo .nome {
+.grupo-card-nome {
   border-radius: 15px;
 }
 
-#lista .grupo .entrada {
+.grupo-card .entrada {
   border-radius: 30px;
   padding: 5px 15px;
+  width: 155px;
 }
 
-#lista .grupo .entrarButton {
+.entrar-button {
   border-radius: 30px;
   font-size: medium;
   padding: 5px 15px;
   cursor: pointer;
 }
 
-#lista .grupo .entrarButton:hover {
+.entrar-button:hover {
   background-color: darkgray;
+}
+
+.deletar-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.deletar-simbolo {
+  color: black;
+  margin: 5px;
+  font-size: large;
+}
+
+.deletar-simbolo:hover {
+  background-color: darkgray;
+  border-radius: 50%;
+  padding: 5px;
+  margin: 0px;
 }
