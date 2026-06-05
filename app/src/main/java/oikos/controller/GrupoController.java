@@ -65,6 +65,12 @@ public class GrupoController {
         return response;
     }
 
+    @GetMapping("/{id}/{senhaIn}")
+    public boolean autenticarSenhaGrupo(@PathVariable UUID id, @PathVariable String senhaIn) {
+        Grupo grupoEncontrado = servicoGrupos.getGrupoPorId(id);
+        return grupoEncontrado.autenticarSenha(senhaIn);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirGrupo(@PathVariable UUID id, @RequestBody ExcluirGrupoRequest request) {
         String senha = request.senha();
@@ -92,5 +98,10 @@ public class GrupoController {
         servicoGrupos.pontuar(id, pessoaId, eventoId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/classificar")
+    public String getClassificacaoGrupo(@PathVariable UUID id) {
+        return servicoGrupos.getGrupoPorId(id).getClassificacao();
     }
 }
