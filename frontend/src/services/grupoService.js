@@ -5,6 +5,12 @@ const grupoService = {
     const response = await api.get('/grupos');
     return response.data;
   },
+
+  getGrupoPorId: async (id) => {
+    const response = await api.get(`/grupos/${id}`);
+    return response.data;
+  },
+
   
   criarGrupo: async (nome, senha) => {
     const response = await api.post('/grupos', { nome, senha });
@@ -31,8 +37,8 @@ const grupoService = {
   autenticarSenhaGrupo: async (grupoId, senhaIn) => {
     const response = await api.get(`/grupos/${grupoId}/${senhaIn}`);
     return response.data;
-  },
-
+  }, 
+  
   getClassificacaoGrupo: async (grupoId) => {
     const response = await api.get(`/${grupoId}/classificar`)
     return response.data;

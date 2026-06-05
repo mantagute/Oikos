@@ -1,0 +1,27 @@
+.pagina-grupo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pagina-grupo-header {
+  background-color: darkgray;
+}
+
+.pagina-grupo-voltar {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.pagina-grupo-voltar:hover {
+  text-decoration: underline;
+}
+
+.pagina-grupo-perfil {
+  margin-top: 5%;
+}
+
+.pagina-grupo-meta {
+  margin-top: 5%;
+}
