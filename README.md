@@ -10,11 +10,37 @@ Desenvolver uma plataforma de rede social voltada ao rastreamento de hábitos (*
 
 ---
 
+## Como rodar
+
+Para testar o protótipo, clone o repositório do projeto:
+
+```
+git clone git@github.com:mantagute/Oikos.git
+``` 
+
+Ao fazer isso, uma pasta chamada "Oikos" deve aparecer no diretório em que o comando foi executado. Navegue para essa pasta, e em sua raiz, rode o comando:
+
+```
+./gradlew bootRun
+```
+
+Mantenha esse terminal aberto e rodando, ele estará cuidando do back-end do projeto.
+
+Agora abra um novo terminal e navegue para o subdiretório "/frontend" do projeto. Nesse diretório, rode o camando:
+
+```
+npm run dev
+```
+
+O terminal te retornará um endereço url, provavelmente http://localhost:5173/. Insira esse endereço em um navegador (de preferência baseado em Chromium) e comece a utiizar o protótipo.
+
+Lembre-se de manter ambos os terminais abertos para que o sistema funcione corretamente
+
 ## Requisitos Funcionais
 
 - A plataforma permite a **criação de grupos com senhas**. Dentro de um grupo, os usuários podem adicionar ou remover pessoas, definir eventos (com pontuação associada) e metas a serem cumpridas coletivamente.
 - A qualquer momento, os usuários podem informar ao sistema que uma pessoa realizou determinado evento. A plataforma contabiliza e registra os avanços do grupo, salvando essas informações em arquivos permanentes.
-- O sistema identifica automaticamente quando um grupo bate uma meta. O número de metas cumpridas é armazenado e exibido, e bater uma meta resulta na evolução do **status** do grupo.
+- O sistema identifica automaticamente quando um grupo bate uma meta. O número de metas cumpridas é armazenado, e bater a meta resulta na evolução da **classificação** do grupo.
 
 ---
 
