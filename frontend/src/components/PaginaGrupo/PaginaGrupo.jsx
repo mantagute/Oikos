@@ -16,6 +16,7 @@ function PaginaGrupo() {
   const [eventos, setEventos] = useState([]);
   const [pessoaSelecionada, setPessoa] = useState(null);
   const [eventoSelecionado, setEvento] = useState(null);
+  const [novaMeta, setNovaMeta] = useState(null);
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -74,6 +75,20 @@ function PaginaGrupo() {
     }
   }
 
+  const lidarRedefinirMeta = async (meta) => {
+    try {
+      if (!meta) {
+        return alert("Insira a nova meta");
+      }
+      await grupoService.redefinirMetaGrupo(id, meta);
+      const dadosGrupo = await grupoService.getGrupoPorId(id);
+      setGrupo(dadosGrupo);
+      setNovaMeta('');
+    } catch (error) {
+      console.error("Erro ao redefinir a meta:", error);
+    }
+  }
+
 
 
   return (
@@ -89,6 +104,10 @@ function PaginaGrupo() {
           <h2 className="pagina-grupo-meta">
             meta: {grupo.pontuacaoAtual}/{grupo.meta}
           </h2>
+          <div>
+            <input className='redefinir-meta-input' type='number' placeholder='Redefina a meta' value={novaMeta || ''} onChange={(e) => setNovaMeta(e.target.value)}></input>
+            <button className="redefinir-meta-button" onClick={() => {lidarRedefinirMeta(novaMeta)}}>Aplicar</button>
+          </div>
           <h3 className="pagina-grupo-categoria">categoria: {grupo.classificacao}</h3>
         </div>
         <div className="pagina-grupo-pontuar">

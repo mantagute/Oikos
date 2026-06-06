@@ -60,3 +60,28 @@
 .pontuar-button:hover {
   background-color: darkgray;
 }
+
+.redefinir-meta-input {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-width: 1px;
+  border-color: black;
+  padding: 3px 9px;
+  font-size: xx-small;
+  width: 90px;
+}
+
+.redefinir-meta-button {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-width: 1px;
+  border-color: black;
+  padding: 3px 0px;
+  cursor: pointer;
+  font-size: xx-small;
+  width: 50px;
+}
+
+.redefinir-meta-button:hover {
+  background-color: darkgray;
+}

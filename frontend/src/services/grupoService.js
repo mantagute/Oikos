@@ -40,7 +40,12 @@ const grupoService = {
   }, 
   
   getClassificacaoGrupo: async (grupoId) => {
-    const response = await api.get(`/${grupoId}/classificar`)
+    const response = await api.get(`/grupos/${grupoId}/classificar`);
+    return response.data;
+  },
+
+  redefinirMetaGrupo: async (grupoId, novaMeta) => {
+    const response = await api.put(`/grupos/${grupoId}/meta`, { meta: novaMeta });
     return response.data;
   }
 };
