@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import GerenciadorPessoas from '../PaginaGrupo/GerenciadorPessoas';
+import GerenciadorPessoas from './GerenciadorPessoas';
 import GerenciadorEventos from './GerenciadorEventos';
 import grupoService from '../../services/grupoService';
 import pessoaService from '../../services/pessoaService';
