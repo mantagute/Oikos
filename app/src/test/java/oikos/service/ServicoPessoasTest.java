@@ -25,7 +25,7 @@ class ServicoPessoasTest {
 
     @Test
     void adicionarPessoaComNomeCorreto() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         Pessoa pessoa = new Pessoa("João");
         servicoPessoas.adicionar(grupo.getId(), pessoa);
@@ -38,7 +38,7 @@ class ServicoPessoasTest {
 
     @Test
     void adicionarComNomeVazioDeveLancaExcecao() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         Pessoa pessoa = new Pessoa("   ");
         assertThrows(IllegalArgumentException.class, () -> servicoPessoas.adicionar(grupo.getId(), pessoa));
@@ -54,7 +54,7 @@ class ServicoPessoasTest {
 
     @Test
     void removerPessoaDoGrupo() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         Pessoa pessoa = new Pessoa("João");
         servicoPessoas.adicionar(grupo.getId(), pessoa);
         
@@ -65,7 +65,7 @@ class ServicoPessoasTest {
 
     @Test
     void removerPessoaInexistenteLancaExcecao() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         assertThrows(NoSuchElementException.class, () -> servicoPessoas.remover(grupo.getId(), UUID.randomUUID()));
     }

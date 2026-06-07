@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import oikos.api.autenticar.AutenticarRequest;
 import oikos.api.grupo.CriarGrupoRequest;
-import oikos.api.grupo.ExcluirGrupoRequest;
 import oikos.api.grupo.GrupoResponse;
 import oikos.api.grupo.PontuarRequest;
 import oikos.api.grupo.RedefinirMetaRequest;
@@ -35,7 +35,7 @@ public class GrupoController {
 
     @GetMapping
     public List<GrupoResponse> getListaGrupos() {
-        List<Grupo> grupos = servicoGrupos.getListaGrupos();
+        List<Grupo> grupos = servicoGrupos.getLista();
         List<GrupoResponse> responses = new ArrayList<>();
 
         for (Grupo grupo : grupos) {
@@ -51,7 +51,7 @@ public class GrupoController {
         String nome = request.nome();
         String senha = request.senha();
 
-        Grupo grupoCriado = servicoGrupos.criarGrupo(nome, senha);
+        Grupo grupoCriado = servicoGrupos.criar(nome, senha);
         GrupoResponse response = GrupoResponse.from(grupoCriado);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -59,23 +59,23 @@ public class GrupoController {
 
     @GetMapping("/{id}")
     public GrupoResponse getGrupoPorId(@PathVariable UUID id) {
-        Grupo grupoEncontrado = servicoGrupos.getGrupoPorId(id);
+        Grupo grupoEncontrado = servicoGrupos.getPorId(id);
         GrupoResponse response = GrupoResponse.from(grupoEncontrado);
 
         return response;
     }
 
-    @GetMapping("/{id}/{senhaIn}")
-    public boolean autenticarSenhaGrupo(@PathVariable UUID id, @PathVariable String senhaIn) {
-        Grupo grupoEncontrado = servicoGrupos.getGrupoPorId(id);
-        return grupoEncontrado.autenticarSenha(senhaIn);
+    @PostMapping("/{id}/autenticar") 
+    public boolean autenticar(@PathVariable UUID id, @RequestBody AutenticarRequest request) {
+        Grupo grupoEncontrado = servicoGrupos.getPorId(id);
+        return grupoEncontrado.autenticarSenha(request.senha());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirGrupo(@PathVariable UUID id, @RequestBody ExcluirGrupoRequest request) {
+    public ResponseEntity<Void> excluirGrupo(@PathVariable UUID id, @RequestBody AutenticarRequest request) {
         String senha = request.senha();
 
-        servicoGrupos.excluirGrupo(id, senha);
+        servicoGrupos.excluir(id, senha);
 
         return ResponseEntity.noContent().build();
     }
@@ -102,6 +102,6 @@ public class GrupoController {
 
     @GetMapping("/{id}/classificar")
     public String getClassificacaoGrupo(@PathVariable UUID id) {
-        return servicoGrupos.getGrupoPorId(id).getClassificacao();
+        return servicoGrupos.getPorId(id).getClassificacao();
     }
 }

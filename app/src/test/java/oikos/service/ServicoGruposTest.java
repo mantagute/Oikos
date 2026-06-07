@@ -23,39 +23,39 @@ class ServicoGruposTest {
 
     @Test
     void criarGrupoComDadosValidos() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         assertNotNull(grupo.getId());
         assertEquals("Família", grupo.getNome());
-        assertEquals(1, servicoGrupos.getListaGrupos().size());
+        assertEquals(1, servicoGrupos.getLista().size());
     }
 
     @Test
     void criarGrupoComNomeOuSenhaVaziosLancaExcecao() {
-        assertThrows(IllegalArgumentException.class, () -> servicoGrupos.criarGrupo("", "1234"));
-        assertThrows(IllegalArgumentException.class, () -> servicoGrupos.criarGrupo("Família", ""));
+        assertThrows(IllegalArgumentException.class, () -> servicoGrupos.criar("", "1234"));
+        assertThrows(IllegalArgumentException.class, () -> servicoGrupos.criar("Família", ""));
     }
 
     @Test
     void excluirGrupoComSenhaCorreta() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
-        servicoGrupos.excluirGrupo(grupo.getId(), "1234");
+        servicoGrupos.excluir(grupo.getId(), "1234");
         
-        assertEquals(0, servicoGrupos.getListaGrupos().size());
+        assertEquals(0, servicoGrupos.getLista().size());
     }
 
     @Test
     void excluirGrupoComSenhaIncorretaLancaExcecao() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
-        assertThrows(SecurityException.class, () -> servicoGrupos.excluirGrupo(grupo.getId(), "senha-errada"));
-        assertEquals(1, servicoGrupos.getListaGrupos().size()); 
+        assertThrows(SecurityException.class, () -> servicoGrupos.excluir(grupo.getId(), "senha-errada"));
+        assertEquals(1, servicoGrupos.getLista().size()); 
     }
 
     @Test
     void pontuarComPessoaEEventoValidos() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         Pessoa pessoa = new Pessoa("João");
         Evento evento = new Evento("Leitura", 10);
@@ -69,7 +69,7 @@ class ServicoGruposTest {
 
     @Test
     void pontuarComPessoaOuEventoInvalidosLancaExcecao() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         assertThrows(IllegalArgumentException.class, () -> 
             servicoGrupos.pontuar(grupo.getId(), UUID.randomUUID(), UUID.randomUUID())

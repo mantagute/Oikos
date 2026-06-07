@@ -23,7 +23,7 @@ class ServicoEventosTest {
 
     @Test
     void adicionarEventoValidoEmGrupo() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         Evento evento = new Evento("Limpar o quarto", 15);
         servicoEventos.adicionar(grupo.getId(), evento);
@@ -34,7 +34,7 @@ class ServicoEventosTest {
 
     @Test
     void adicionarNomeVazioLancaExcecao() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         Evento evento = new Evento("", 15);
         assertThrows(IllegalArgumentException.class, () -> servicoEventos.adicionar(grupo.getId(), evento));
@@ -42,7 +42,7 @@ class ServicoEventosTest {
 
     @Test
     void adicionarPontosInvalidosLancaExcecao() {
-        Grupo grupo = servicoGrupos.criarGrupo("Família", "1234");
+        Grupo grupo = servicoGrupos.criar("Família", "1234");
         
         Evento evento = new Evento("Limpar o quarto", 0);
         assertThrows(IllegalArgumentException.class, () -> servicoEventos.adicionar(grupo.getId(), evento));
