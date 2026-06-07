@@ -34,8 +34,8 @@ const grupoService = {
     return response.data;
   },
 
-  autenticarSenhaGrupo: async (grupoId, senhaIn) => {
-    const response = await api.get(`/grupos/${grupoId}/${senhaIn}`);
+  autenticarSenhaGrupo: async (grupoId, senha) => {
+    const response = await api.post(`/grupos/${grupoId}/autenticar`, {senha: senha});
     return response.data;
   }, 
   
