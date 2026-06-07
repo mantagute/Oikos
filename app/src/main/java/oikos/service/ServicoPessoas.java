@@ -25,7 +25,7 @@ public class ServicoPessoas extends ServicoEntidades<Pessoa> {
     }
     
     protected Gerenciador<Pessoa> getGerenciadorPorGrupoId(UUID grupoId) {
-        Grupo grupo = servicoGrupos.getGrupoPorId(grupoId);
+        Grupo grupo = servicoGrupos.getPorId(grupoId);
         Gerenciador<Pessoa> gerenciador = grupo.getGerenciadorPessoas();
 
         return gerenciador;

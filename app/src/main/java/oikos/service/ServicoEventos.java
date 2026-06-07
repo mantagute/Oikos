@@ -25,7 +25,7 @@ public class ServicoEventos extends ServicoEntidades<Evento> {
     }
 
     protected Gerenciador<Evento> getGerenciadorPorGrupoId(UUID grupoId) {
-        Grupo grupo = servicoGrupos.getGrupoPorId(grupoId);
+        Grupo grupo = servicoGrupos.getPorId(grupoId);
         Gerenciador<Evento> gerenciador = grupo.getGerenciadorEventos();
 
         return gerenciador;
