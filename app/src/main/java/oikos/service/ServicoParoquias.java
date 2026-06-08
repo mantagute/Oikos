@@ -11,6 +11,7 @@ import oikos.persistence.PersistenciaJson;
 
 import oikos.domain.model.Paroquia;
 import oikos.domain.model.Grupo;
+import oikos.domain.model.Notificacao;
 
 
 @Service
@@ -49,6 +50,35 @@ public class ServicoParoquias extends ServicoEscopoMaior<Paroquia> {
         Paroquia paroquia = getPorId(idParoquia);
         paroquia.getGerenciadorGrupos().removerEntidade(idGrupo);
         salvar();
+    }
+
+    /**
+     * Envia uma notificação para grupos vinculados à paróquia.
+     * Se {@code gruposIds} for nulo, envia para todos os grupos vinculados.
+     *
+     * @param idParoquia UUID da paróquia remetente.
+     * @param mensagem   Conteúdo da notificação.
+     * @param gruposIds  UUIDs dos grupos destinatários, ou {@code null} para todos.
+     * @throws IllegalArgumentException se a mensagem for vazia ou um grupo não estiver vinculado.
+     */
+    public void enviarNotificacoes(UUID idParoquia, String mensagem, List<UUID> gruposIds) {
+        if (mensagem == null || mensagem.isBlank()) {
+            throw new IllegalArgumentException("Mensagem da notificação não pode ser vazia.");
+        }
+
+        Paroquia paroquia = getPorId(idParoquia);
+
+        List<UUID> destinatarios = (gruposIds != null) ? gruposIds  : paroquia.getGerenciadorGrupos().getListaEntidades().stream().map(Grupo::getId).toList();
+
+        for (UUID grupoId : destinatarios) {
+            Grupo grupo = paroquia.getGerenciadorGrupos().getPorId(grupoId);
+            if (grupo == null) {
+                throw new IllegalArgumentException("O grupo " + grupoId + " não está vinculado a esta paróquia.");
+            }
+            grupo.getGerenciadorNotificacoes().adicionarEntidade(new Notificacao(mensagem, idParoquia));
+        }
+
+        servicoGrupos.salvar();
     }
 
 }
