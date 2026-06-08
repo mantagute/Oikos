@@ -125,4 +125,19 @@ public class ServicoGrupos extends ServicoEscopoMaior<Grupo> {
 
         return grupo;
     }
+
+    /**
+     * Redefine a senha de um grupo, exigindo a senha atual para autorização.
+     *
+     * @param id         Identificador do grupo.
+     * @param senhaAtual Senha atual do grupo para validação.
+     * @param novaSenha  Nova senha desejada.
+     * @throws IllegalArgumentException se a senha atual estiver incorreta.
+     * @throws NoSuchElementException   se o grupo não for encontrado.
+     */
+    public void redefinirSenha(UUID id, String senhaAtual, String novaSenha) {
+        Grupo grupo = getPorId(id);
+        grupo.redefinirSenha(senhaAtual, novaSenha);
+        salvar();
+    }
 }

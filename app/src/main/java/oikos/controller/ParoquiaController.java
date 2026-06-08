@@ -18,6 +18,7 @@ import oikos.api.paroquia.CriarParoquiaRequest;
 import oikos.api.autenticar.AutenticarRequest;
 import oikos.api.paroquia.ParoquiaResponse;
 import oikos.api.paroquia.VincularGrupoRequest;
+import oikos.api.paroquia.EnviarNotificacaoRequest;
 import oikos.api.grupo.GrupoResponse;
 import oikos.domain.model.Grupo;
 import oikos.domain.model.Paroquia;
@@ -81,6 +82,12 @@ public class ParoquiaController {
     @DeleteMapping("{id}/vinculos/{grupoId}")
     public ResponseEntity<Void> desvincularGrupo(@PathVariable UUID id, @PathVariable UUID grupoId) {
         servicoParoquias.desvincularGrupo(id, grupoId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("{id}/notificacoes")
+    public ResponseEntity<Void> enviarNotificacoes(@PathVariable UUID id, @RequestBody EnviarNotificacaoRequest request) {
+        servicoParoquias.enviarNotificacoes(id, request.mensagem(), request.gruposIds());
         return ResponseEntity.noContent().build();
     }
 

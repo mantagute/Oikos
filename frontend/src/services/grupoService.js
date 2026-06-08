@@ -47,6 +47,11 @@ const grupoService = {
   redefinirMetaGrupo: async (grupoId, novaMeta) => {
     const response = await api.put(`/grupos/${grupoId}/meta`, { meta: novaMeta });
     return response.data;
+  },
+
+  redefinirSenhaGrupo: async (grupoId, senhaAtual, novaSenha) => {
+    const response = await api.patch(`/grupos/${grupoId}/senha`, { senhaAtual, novaSenha });
+    return response.data;
   }
 };
 
