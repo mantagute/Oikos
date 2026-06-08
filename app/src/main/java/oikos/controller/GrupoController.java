@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import oikos.api.grupo.CriarGrupoRequest;
 import oikos.api.grupo.GrupoResponse;
 import oikos.api.grupo.PontuarRequest;
 import oikos.api.grupo.RedefinirMetaRequest;
+import oikos.api.grupo.RedefinirSenhaRequest;
 import oikos.domain.model.Grupo;
 import oikos.service.ServicoGrupos;
 
@@ -103,5 +105,11 @@ public class GrupoController {
     @GetMapping("/{id}/classificar")
     public String getClassificacaoGrupo(@PathVariable UUID id) {
         return servicoGrupos.getPorId(id).getClassificacao();
+    }
+
+    @PatchMapping("/{id}/senha")
+    public ResponseEntity<Void> redefinirSenha(@PathVariable UUID id, @RequestBody RedefinirSenhaRequest request) {
+        servicoGrupos.redefinirSenha(id, request.senhaAtual(), request.novaSenha());
+        return ResponseEntity.noContent().build();
     }
 }
