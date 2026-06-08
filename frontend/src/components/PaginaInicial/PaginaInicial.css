@@ -2,12 +2,39 @@
   margin-top: 10px;
 }
 
-.pagina-inicial-grupos {
+.pagina-inicial-grupos,
+.pagina-inicial-paroquias {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 40px;
+}
+
+.selecao-modo {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.selecao-modo button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid gray;
+  background-color: white;
+  cursor: pointer;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.selecao-modo button.ativo {
+  background-color: black;
+  color: white;
+}
+
+.selecao-modo button:hover:not(.ativo) {
+  background-color: lightgray;
 }
 
 .pagina-inicial-criar {

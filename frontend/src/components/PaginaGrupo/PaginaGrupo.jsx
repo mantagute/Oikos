@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import GerenciadorPessoas from './GerenciadorPessoas';
 import GerenciadorEventos from './GerenciadorEventos';
+import GerenciadorNotificacoes from "./GerenciadorNotificacoes";
 import grupoService from '../../services/grupoService';
 import pessoaService from '../../services/pessoaService';
 import eventoService from '../../services/eventoService';
+import notificacaoService from '../../services/notificacaoService';
 import './PaginaGrupo.css';
 
 function PaginaGrupo() {
@@ -14,6 +16,7 @@ function PaginaGrupo() {
   const [grupo, setGrupo] = useState(null);
   const [pessoas, setPessoas] = useState([]);
   const [eventos, setEventos] = useState([]);
+  const [notificacoes, setNotificacoes] = useState([]);
   const [pessoaSelecionada, setPessoa] = useState(null);
   const [eventoSelecionado, setEvento] = useState(null);
   const [novaMeta, setNovaMeta] = useState(null);
@@ -21,14 +24,16 @@ function PaginaGrupo() {
   useEffect(() => {
     const carregarDados = async () => {
       try {
-        const [dadosGrupo, dadosPessoas, dadosEventos] = await Promise.all([
+        const [dadosGrupo, dadosPessoas, dadosEventos, dadosNotificacoes] = await Promise.all([
           grupoService.getGrupoPorId(id),
           pessoaService.getListaPessoas(id),
-          eventoService.getListaEventos(id)
+          eventoService.getListaEventos(id),
+          notificacaoService.getListaNotificacoes(id)
         ]); 
         setGrupo(dadosGrupo);
         setPessoas(dadosPessoas);
-        setEventos(dadosEventos)
+        setEventos(dadosEventos);
+        setNotificacoes(dadosNotificacoes);
       } catch (error) {
         console.error('Erro ao carregar grupo:', error);
       }
@@ -72,6 +77,15 @@ function PaginaGrupo() {
       setEventos(dadosEventos);
     } catch (error) {
       console.error("Erro ao atualizar eventos:", error);
+    }
+  }
+
+  const onAtualizarNotificacoes = async () => {
+    try {
+      const dadosNotificacoes = await notificacaoService.getListaNotificacoes(id);
+      setNotificacoes(dadosNotificacoes);
+    } catch (error) {
+      console.error("Erro ao atualizar notificacoes:", error);
     }
   }
 
@@ -133,7 +147,8 @@ function PaginaGrupo() {
         </div>
       </div>
       <GerenciadorPessoas grupoId={id} pessoas={pessoas} onAtualizarPessoas={onAtualizarPessoas} />
-      <GerenciadorEventos grupoId={id} eventos = {eventos} onAtualizarEventos={onAtualizarEventos}/>
+      <GerenciadorEventos grupoId={id} eventos ={eventos} onAtualizarEventos={onAtualizarEventos}/>
+      <GerenciadorNotificacoes grupoId={id} notificacoes ={notificacoes} onAtualizarNotificacoes={onAtualizarNotificacoes}/>
     </>
   );
 }

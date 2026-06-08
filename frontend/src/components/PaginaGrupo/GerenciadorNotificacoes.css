@@ -1,0 +1,51 @@
+.gerenciador-notificacoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.lista-notificacoes {
+    list-style: none;
+    padding: 0;
+}
+
+.notificacao {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.notificacao-status {
+    font-size: x-small;
+    color: gray;
+    font-style: italic;
+}
+
+.marcar-lida-button {
+    font-size: x-small;
+    border-radius: 30px;
+    border-width: 1px;
+    border-color: black;
+    padding: 3px 9px;
+    cursor: pointer;
+}
+
+.marcar-lida-button:hover {
+    background-color: darkgray;
+}
+
+.excluir-notificacao-button {
+    font-size: x-small;
+    border-radius: 30px;
+    border-width: 1px;
+    border-color: black;
+    padding: 3px 9px;
+    cursor: pointer;
+}
+
+.excluir-notificacao-button:hover {
+    background-color: darkgray;
+}
