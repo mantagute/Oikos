@@ -3,7 +3,7 @@ import grupoService from '../services/grupoService';
 import pessoaService from '../services/pessoaService';
 import eventoService from '../services/eventoService';
 import notificacaoService from '../services/notificacaoService';
-import { useToast } from '../components/common/useToast';
+import  useToast  from './useToast';
 
 export function useGrupo(id) {
   const [grupo, setGrupo] = useState(null);

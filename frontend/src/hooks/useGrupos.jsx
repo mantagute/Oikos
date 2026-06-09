@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import grupoService from '../services/grupoService';
-import { useToast } from '../components/common/useToast';
+import  useToast  from './useToast';
 
 export function useGrupos() {
     const navigate = useNavigate();

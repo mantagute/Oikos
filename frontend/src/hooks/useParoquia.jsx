@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import paroquiaService from '../services/paroquiaService';
-import { useToast } from '../components/common/useToast';
+import  useToast  from './useToast';
 
 export function useParoquia(idParoquia) {
     const [paroquia, setParoquia] = useState(null);
