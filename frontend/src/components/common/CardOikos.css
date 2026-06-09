@@ -1,0 +1,19 @@
+.card-oikos {
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: var(--oikos-shadow);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.card-oikos:hover {
+  box-shadow: 0 8px 24px rgba(107, 58, 31, 0.12);
+}
+
+.card-destaque {
+  background-color: var(--oikos-bg);
+  border-color: var(--oikos-accent);
+}

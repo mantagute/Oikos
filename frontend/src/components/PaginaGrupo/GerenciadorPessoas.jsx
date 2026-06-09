@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import pessoaService  from '../../services/pessoaService';
+import { InputOikos, BotaoOikos } from '../common';
 import './GerenciadorPessoas.css';
 
 function GerenciadorPessoas({grupoId, pessoas, onAtualizarPessoas }) {
@@ -35,21 +36,19 @@ function GerenciadorPessoas({grupoId, pessoas, onAtualizarPessoas }) {
             </header>
             <ul className='lista-pessoa'>
                 {pessoas.map((pessoa) => (
-                    <li className='pessoa' key={pessoa.id}>
-                        {pessoa.nome}
-                        <button className='excluir-button' onClick={() => lidarExcluirPessoa(pessoa.id)}>Excluir</button>
+                    <li className='pessoa-item' key={pessoa.id}>
+                        <span className="pessoa-nome">{pessoa.nome}</span>
+                        <BotaoOikos variante="perigo" onClick={() => lidarExcluirPessoa(pessoa.id)}>Excluir</BotaoOikos>
                     </li>
                 ))}
             </ul>
             <div className='caixa-criar-pessoa'>
-                <input 
-                    className='input-nova-pessoa'
-                    type="text"
+                <InputOikos 
                     placeholder="Nome da nova pessoa"
                     value={novoNome}
                     onChange={(e) => setNovoNome(e.target.value)}
                 />
-                <button className="criar-button" onClick={lidarCriarPessoa}>Adicionar Pessoa</button> 
+                <BotaoOikos variante="primario" onClick={lidarCriarPessoa}>Adicionar Pessoa</BotaoOikos> 
             </div>
         </section>
     );

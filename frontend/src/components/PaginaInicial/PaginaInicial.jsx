@@ -7,10 +7,8 @@ function PaginaInicial() {
   return (
     <main className="pagina-inicial">
       <header className="pagina-inicial-header">
-        <div>
-          <h1>Oikos</h1>
-          <h2>Seja bem vindo ao portal</h2>
-        </div>
+        <img src="/oikosLogo.png" alt="Oikos Logo" className="logo-oikos" />
+        <h2>Seja bem vindo ao portal</h2>
       </header>
 
       <section className="portal-container">

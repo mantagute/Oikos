@@ -1,0 +1,35 @@
+.input-oikos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.input-oikos-label {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.input-oikos-campo {
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: 1px solid var(--oikos-text-secondary);
+  color: var(--oikos-primary);
+  font-family: var(--oikos-font-body);
+  font-size: 1rem;
+  outline: none;
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.input-oikos-campo::placeholder {
+  color: #ccc;
+}
+
+.input-oikos-campo:focus {
+  border-color: var(--oikos-accent);
+  box-shadow: 0 0 0 3px rgba(196, 154, 43, 0.15);
+}

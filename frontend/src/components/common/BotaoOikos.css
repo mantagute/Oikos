@@ -1,0 +1,70 @@
+.botao-oikos {
+  align-items: center;
+  border-radius: var(--oikos-radius);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--oikos-font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  gap: 8px;
+  justify-content: center;
+  padding: 12px 24px;
+  transition: all 0.2s ease;
+}
+
+.botao-oikos:active {
+  transform: scale(0.98);
+}
+
+.botao-oikos:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Primário: Dourado (Ação principal) */
+.botao-primario {
+  background-color: var(--oikos-accent);
+  box-shadow: 0 4px 6px rgba(196, 154, 43, 0.2);
+  color: white;
+}
+
+.botao-primario:hover:not(:disabled) {
+  background-color: #b38b25; /* slightly darker gold */
+  box-shadow: 0 6px 12px rgba(196, 154, 43, 0.3);
+}
+
+/* Secundário: Marrom da marca */
+.botao-secundario {
+  background-color: transparent;
+  border: 2px solid var(--oikos-primary);
+  color: var(--oikos-primary);
+}
+
+.botao-secundario:hover:not(:disabled) {
+  background-color: var(--oikos-primary);
+  color: var(--oikos-bg);
+}
+
+/* Perigo: Usado para exclusões sem ser muito agressivo */
+.botao-perigo {
+  background-color: transparent;
+  border: 1px solid #d9534f;
+  color: #d9534f;
+}
+
+.botao-perigo:hover:not(:disabled) {
+  background-color: #d9534f;
+  color: white;
+}
+
+/* Texto: Apenas link */
+.botao-texto {
+  background-color: transparent;
+  color: var(--oikos-text-secondary);
+  padding: 8px 16px;
+}
+
+.botao-texto:hover:not(:disabled) {
+  color: var(--oikos-primary);
+}

@@ -1,5 +1,5 @@
 import notificacaoService from "../../services/notificacaoService";
-
+import { BotaoOikos } from '../common';
 import "./GerenciadorNotificacoes.css"
 
 function GerenciadorNotificacoes({grupoId, notificacoes, onAtualizarNotificacoes}) {
@@ -29,17 +29,18 @@ function GerenciadorNotificacoes({grupoId, notificacoes, onAtualizarNotificacoes
             </header>
             <ul className='lista-notificacoes'>
                 {notificacoes.map((notificacao) => (
-                    <li className='notificacao' key={notificacao.id}>
-                        <span>{notificacao.mensagem}</span>
-                        <span className='notificacao-status'>{notificacao.lida ? 'Lida' : 'Não lida'}</span>
-                        {!notificacao.lida && (
-                            <button className='marcar-lida-button' onClick={() => lidarMarcarComoConcluido(notificacao.id)}>
-                                Marcar como lida
-                            </button>
-                        )}
-                        <button className='excluir-notificacao-button' onClick={() => lidarExcluirNotificacao(notificacao.id)}>
-                            Excluir
-                        </button>
+                    <li className={`notificacao-item ${notificacao.lida ? 'lida' : 'nao-lida'}`} key={notificacao.id}>
+                        <p className="notificacao-mensagem">{notificacao.mensagem}</p>
+                        <div className="notificacao-acoes">
+                            {!notificacao.lida && (
+                                <BotaoOikos variante="primario" onClick={() => lidarMarcarComoConcluido(notificacao.id)}>
+                                    Marcar como lida
+                                </BotaoOikos>
+                            )}
+                            <BotaoOikos variante="perigo" onClick={() => lidarExcluirNotificacao(notificacao.id)}>
+                                Excluir
+                            </BotaoOikos>
+                        </div>
                     </li>
                 ))}
             </ul>

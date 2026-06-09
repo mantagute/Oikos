@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import eventoService  from '../../services/eventoService';
+import { InputOikos, BotaoOikos } from '../common';
 import './GerenciadorEventos.css';
 
 function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
@@ -35,30 +36,27 @@ function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
             <header>
                 <h2>Eventos</h2>
             </header>
-            <ul>
+            <ul className="lista-eventos">
                 {eventos.map((evento) => (
-                    <li key={evento.id}>
-                        {evento.nome}
-                        <button className='excluir-button' onClick={() => lidarExcluirEvento(evento.id)}>Excluir</button>
+                    <li key={evento.id} className="evento-item">
+                        <span className="evento-nome">{evento.nome} ({evento.pontos} pts)</span>
+                        <BotaoOikos variante="perigo" onClick={() => lidarExcluirEvento(evento.id)}>Excluir</BotaoOikos>
                     </li>
                 ))}
             </ul>
             <div className='caixa-criar-evento'>
-                <input 
-                    type="text"
+                <InputOikos 
                     placeholder="Nome do novo evento"
                     value={novoNome}
                     onChange={(e) => setNovoNome(e.target.value)}
-                    className='input-novo-evento'
                 />
-                <input 
+                <InputOikos 
                     type="number"
                     placeholder="Pontos"
                     value={pontos}
                     onChange={(e) => setPontos(e.target.value)}
-                    className='input-novo-evento-pontos'
                 />
-                <button className="criar-button" onClick={lidarCriarEvento}>Adicionar Evento</button>
+                <BotaoOikos variante="primario" onClick={lidarCriarEvento}>Adicionar Evento</BotaoOikos>
             </div> 
         </section>
     );
