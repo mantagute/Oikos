@@ -23,8 +23,10 @@ function GerenciadorNotificacoes({grupoId, notificacoes, onAtualizarNotificacoes
     }
 
     return (
-        <div className='gerenciador-notificacoes'>
-            <h2>Notificações</h2>
+        <section className='gerenciador-notificacoes'>
+            <header>
+                <h2>Notificações</h2>
+            </header>
             <ul className='lista-notificacoes'>
                 {notificacoes.map((notificacao) => (
                     <li className='notificacao' key={notificacao.id}>
@@ -41,7 +43,7 @@ function GerenciadorNotificacoes({grupoId, notificacoes, onAtualizarNotificacoes
                     </li>
                 ))}
             </ul>
-        </div>
+        </section>
     );
 }
 

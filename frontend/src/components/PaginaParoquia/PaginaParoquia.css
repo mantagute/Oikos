@@ -1,0 +1,264 @@
+.pagina-paroquia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pagina-paroquia-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.pagina-paroquia-voltar {
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.pagina-paroquia-perfil {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.pagina-paroquia-titulo {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.pagina-paroquia-subtitulo {
+    color: #7f8c8d;
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+.painel-notificacoes {
+    width: 100%;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.painel-notificacoes h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #343a40;
+}
+
+.textarea-notificacao {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    font-family: inherit;
+    font-size: 16px;
+    resize: vertical;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.textarea-notificacao:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.painel-notificacoes-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dica-envio {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+}
+
+.enviar-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.enviar-button:hover {
+    background-color: #0056b3;
+}
+
+.lista-grupos-vinculados {
+    width: 100%;
+}
+
+.lista-grupos-vinculados h2 {
+    color: #343a40;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.grupos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.grupo-vinculado-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.grupo-vinculado-item:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.grupo-checkbox {
+    margin-right: 15px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.grupo-nome {
+    font-size: 16px;
+    color: #495057;
+    user-select: none;
+}
+
+/* Analytics Globais */
+.dashboard-global {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 40px;
+    justify-content: space-between;
+}
+
+.indicador-card {
+    flex: 1;
+    min-width: 150px;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.indicador-card h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.indicador-card p {
+    margin: 10px 0 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.destaque-card {
+    background-color: #e3f2fd;
+    border-color: #b6d4fe;
+}
+
+.destaque-card h3 {
+    color: #0d6efd;
+}
+
+.destaque-card p {
+    color: #0d6efd;
+}
+
+/* Ranking */
+.dashboard-ranking {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.dashboard-ranking h2 {
+    color: #343a40;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.ranking-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.ranking-posicao {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #adb5bd;
+    width: 50px;
+}
+
+.ranking-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.ranking-info strong {
+    font-size: 1.2rem;
+    color: #343a40;
+}
+
+.ranking-info small {
+    color: #6c757d;
+}
+
+.ranking-stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.badge-metas {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}

@@ -1,155 +1,64 @@
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import GerenciadorPessoas from './GerenciadorPessoas';
 import GerenciadorEventos from './GerenciadorEventos';
 import GerenciadorNotificacoes from "./GerenciadorNotificacoes";
-import grupoService from '../../services/grupoService';
-import pessoaService from '../../services/pessoaService';
-import eventoService from '../../services/eventoService';
-import notificacaoService from '../../services/notificacaoService';
+import { useGrupo } from '../../hooks/useGrupo';
 import './PaginaGrupo.css';
 
 function PaginaGrupo() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const hook = useGrupo(id);
 
-  const [grupo, setGrupo] = useState(null);
-  const [pessoas, setPessoas] = useState([]);
-  const [eventos, setEventos] = useState([]);
-  const [notificacoes, setNotificacoes] = useState([]);
-  const [pessoaSelecionada, setPessoa] = useState(null);
-  const [eventoSelecionado, setEvento] = useState(null);
-  const [novaMeta, setNovaMeta] = useState(null);
-
-  useEffect(() => {
-    const carregarDados = async () => {
-      try {
-        const [dadosGrupo, dadosPessoas, dadosEventos, dadosNotificacoes] = await Promise.all([
-          grupoService.getGrupoPorId(id),
-          pessoaService.getListaPessoas(id),
-          eventoService.getListaEventos(id),
-          notificacaoService.getListaNotificacoes(id)
-        ]); 
-        setGrupo(dadosGrupo);
-        setPessoas(dadosPessoas);
-        setEventos(dadosEventos);
-        setNotificacoes(dadosNotificacoes);
-      } catch (error) {
-        console.error('Erro ao carregar grupo:', error);
-      }
-    };
-
-    carregarDados();
-  }, [id]);
-
-  if (!grupo) {
-    return <div className="pagina-grupo">Carregando...</div>;
+  if (!hook.grupo) {
+    return <main className="pagina-grupo">Carregando...</main>;
   }
-
-  const lidarPontuar = async () => {
-    if (!pessoaSelecionada || !eventoSelecionado) {
-      return alert('Selecione uma pessoa e um evento para pontuar');
-    }
-    try {
-      await grupoService.registrarAtividade(id, pessoaSelecionada, eventoSelecionado);
-      const dadosGrupo = await grupoService.getGrupoPorId(id);
-      setGrupo(dadosGrupo);
-    } 
-    catch (error) {
-      console.error('Erro ao registrar atividade:', error);
-      alert('Erro ao registrar atividade.');
-    }
-  }
-
-  const onAtualizarPessoas = async () => {
-    try {
-      const dadosPessoas = await pessoaService.getListaPessoas(id);
-      setPessoas(dadosPessoas);
-    }
-    catch (error) {
-      console.error('Erro ao atualizar pessoas:', error);
-    }
-  }
-
-  const onAtualizarEventos = async () => {
-    try {
-      const dadosEventos = await eventoService.getListaEventos(id);
-      setEventos(dadosEventos);
-    } catch (error) {
-      console.error("Erro ao atualizar eventos:", error);
-    }
-  }
-
-  const onAtualizarNotificacoes = async () => {
-    try {
-      const dadosNotificacoes = await notificacaoService.getListaNotificacoes(id);
-      setNotificacoes(dadosNotificacoes);
-    } catch (error) {
-      console.error("Erro ao atualizar notificacoes:", error);
-    }
-  }
-
-  const lidarRedefinirMeta = async (meta) => {
-    try {
-      if (!meta) {
-        return alert("Insira a nova meta");
-      }
-      await grupoService.redefinirMetaGrupo(id, meta);
-      const dadosGrupo = await grupoService.getGrupoPorId(id);
-      setGrupo(dadosGrupo);
-      setNovaMeta('');
-    } catch (error) {
-      console.error("Erro ao redefinir a meta:", error);
-    }
-  }
-
-
 
   return (
-    <>
-      <div className="pagina-grupo">
+    <main>
+      <header className="pagina-grupo">
         <div className="pagina-grupo-header">
           <button className="pagina-grupo-voltar" onClick={() => navigate('/')}>
             &lt;&lt; Voltar
           </button>
         </div>
-        <div className="pagina-grupo-perfil">
-          <h1 className="pagina-grupo-titulo">{grupo.nome}</h1>
+        <section className="pagina-grupo-perfil">
+          <h1 className="pagina-grupo-titulo">{hook.grupo.nome}</h1>
           <h2 className="pagina-grupo-meta">
-            meta: {grupo.pontuacaoAtual}/{grupo.meta}
+            meta: {hook.grupo.pontuacaoAtual}/{hook.grupo.meta}
           </h2>
           <div>
-            <input className='redefinir-meta-input' type='number' placeholder='Redefina a meta' value={novaMeta || ''} onChange={(e) => setNovaMeta(e.target.value)}></input>
-            <button className="redefinir-meta-button" onClick={() => {lidarRedefinirMeta(novaMeta)}}>Aplicar</button>
+            <input className='redefinir-meta-input' type='number' placeholder='Redefina a meta' value={hook.novaMeta || ''} onChange={(e) => hook.setNovaMeta(e.target.value)}></input>
+            <button className="redefinir-meta-button" onClick={() => {hook.lidarRedefinirMeta(hook.novaMeta)}}>Aplicar</button>
           </div>
-          <h3 className="pagina-grupo-categoria">categoria: {grupo.classificacao}</h3>
-        </div>
-        <div className="pagina-grupo-pontuar">
-          <select className="inputPontuar" onChange={(e) => setPessoa(e.target.value)} value={pessoaSelecionada || ''}>
+          <h3 className="pagina-grupo-categoria">categoria: {hook.grupo.classificacao}</h3>
+        </section>
+        <section className="pagina-grupo-pontuar">
+          <select className="inputPontuar" onChange={(e) => hook.setPessoa(e.target.value)} value={hook.pessoaSelecionada || ''}>
             <option value="">Selecione uma pessoa</option>
-            {pessoas.map((pessoa) => (
+            {hook.pessoas.map((pessoa) => (
               <option key={pessoa.id} value={pessoa.id}>
                 {pessoa.nome}
               </option>
             ))}
           </select>
     
-          <select className="inputPontuar" onChange={(e) => setEvento(e.target.value)} value={eventoSelecionado || ''}>
+          <select className="inputPontuar" onChange={(e) => hook.setEvento(e.target.value)} value={hook.eventoSelecionado || ''}>
             <option value="">Selecione um evento</option>
-            {eventos.map((evento) => (
+            {hook.eventos.map((evento) => (
               <option key={evento.id} value={evento.id}>
                 {evento.nome}
               </option>
             ))}
           </select>
     
-          <button className='pontuar-button' onClick={lidarPontuar}>Pontuar</button>
-        </div>
-      </div>
-      <GerenciadorPessoas grupoId={id} pessoas={pessoas} onAtualizarPessoas={onAtualizarPessoas} />
-      <GerenciadorEventos grupoId={id} eventos ={eventos} onAtualizarEventos={onAtualizarEventos}/>
-      <GerenciadorNotificacoes grupoId={id} notificacoes ={notificacoes} onAtualizarNotificacoes={onAtualizarNotificacoes}/>
-    </>
+          <button className='pontuar-button' onClick={hook.lidarPontuar}>Pontuar</button>
+        </section>
+      </header>
+      <GerenciadorPessoas grupoId={id} pessoas={hook.pessoas} onAtualizarPessoas={hook.onAtualizarPessoas} />
+      <GerenciadorEventos grupoId={id} eventos={hook.eventos} onAtualizarEventos={hook.onAtualizarEventos}/>
+      <GerenciadorNotificacoes grupoId={id} notificacoes={hook.notificacoes} onAtualizarNotificacoes={hook.onAtualizarNotificacoes}/>
+    </main>
   );
 }
 

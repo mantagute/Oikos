@@ -11,30 +11,50 @@
   margin-top: 40px;
 }
 
-.selecao-modo {
+.portal-container {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 30px;
+  margin-top: 60px;
 }
 
-.selecao-modo button {
-  padding: 10px 20px;
+.portal-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 200px;
   border-radius: 20px;
-  border: 1px solid gray;
+  border: 2px solid #ccc;
   background-color: white;
   cursor: pointer;
-  font-size: medium;
-  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-.selecao-modo button.ativo {
-  background-color: black;
-  color: white;
+.portal-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
 }
 
-.selecao-modo button:hover:not(.ativo) {
-  background-color: lightgray;
+.portal-card p {
+  color: #666;
+  text-align: center;
+  padding: 0 15px;
+}
+
+.portal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  border-color: #333;
+}
+
+.paroquia-card {
+  background-color: #f8f9fa;
+}
+
+.paroquia-card:hover {
+  border-color: #007bff;
 }
 
 .pagina-inicial-criar {

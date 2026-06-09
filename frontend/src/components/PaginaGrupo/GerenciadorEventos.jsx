@@ -31,8 +31,10 @@ function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
     }
 
     return (
-        <div className='gerenciador-eventos'>
-            <h2>Eventos</h2>
+        <section className='gerenciador-eventos'>
+            <header>
+                <h2>Eventos</h2>
+            </header>
             <ul>
                 {eventos.map((evento) => (
                     <li key={evento.id}>
@@ -41,7 +43,7 @@ function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
                     </li>
                 ))}
             </ul>
-            <div className=''>
+            <div className='caixa-criar-evento'>
                 <input 
                     type="text"
                     placeholder="Nome do novo evento"
@@ -58,7 +60,7 @@ function GerenciadorEventos({grupoId, eventos, onAtualizarEventos }) {
                 />
                 <button className="criar-button" onClick={lidarCriarEvento}>Adicionar Evento</button>
             </div> 
-        </div>
+        </section>
     );
 }
 

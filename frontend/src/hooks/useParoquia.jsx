@@ -1,0 +1,67 @@
+import { useState, useEffect } from 'react';
+import paroquiaService from '../services/paroquiaService';
+
+export function useParoquia(idParoquia) {
+    const [paroquia, setParoquia] = useState(null);
+    const [gruposVinculados, setGruposVinculados] = useState([]);
+    const [mensagemNotificacao, setMensagemNotificacao] = useState('');
+    
+    // Array com IDs dos grupos que receberão a notificação específica. 
+    // Se estiver vazio, a notificação vai para todos.
+    const [gruposSelecionados, setGruposSelecionados] = useState([]);
+
+    useEffect(() => {
+        const carregarDados = async() => {
+            try {
+                const [dadosParoquia, dadosGruposVinculados] = await Promise.all([
+                    paroquiaService.getParoquiaPorId(idParoquia),
+                    paroquiaService.getGruposVinculados(idParoquia)
+                ]);
+                setParoquia(dadosParoquia);
+                setGruposVinculados(dadosGruposVinculados);
+            } catch (error) {
+                console.error('Erro ao carregar paroquia:', error);
+            }
+        }
+        carregarDados();
+    }, [idParoquia]);
+
+    const lidarEnviarNotificacao = async () => {
+        if (!mensagemNotificacao.trim()) {
+            return alert ("Digite uma mensagem para a notificação.");
+        }
+
+        try {
+            const destinatarios = gruposSelecionados.length > 0 ? gruposSelecionados : null;
+
+            await paroquiaService.enviarNotificacoes(idParoquia, mensagemNotificacao, destinatarios);
+            setMensagemNotificacao('');
+            setGruposSelecionados([]);
+        } catch (error) {
+            console.error('Erro ao enviar notificação:', error);
+        }
+    };
+
+    const alternarSelecaoGrupo = (grupoId) => {
+        setGruposSelecionados((selecionadosAtuais) => {
+            const jaEstaSelecionado = selecionadosAtuais.includes(grupoId);
+    
+            if (jaEstaSelecionado) {
+                return selecionadosAtuais.filter((id) => id !== grupoId);
+            } 
+            else {
+                return [...selecionadosAtuais, grupoId];
+            }
+        });
+    };
+
+    return {
+        paroquia,
+        gruposVinculados,
+        mensagemNotificacao,
+        setMensagemNotificacao,
+        gruposSelecionados,
+        alternarSelecaoGrupo,
+        lidarEnviarNotificacao
+    };
+}

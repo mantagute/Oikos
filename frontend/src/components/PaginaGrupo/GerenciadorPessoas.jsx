@@ -29,8 +29,10 @@ function GerenciadorPessoas({grupoId, pessoas, onAtualizarPessoas }) {
     }
 
     return (
-        <div className='gerenciador-pessoas'>
-            <h2>Pessoas</h2>
+        <section className='gerenciador-pessoas'>
+            <header>
+                <h2>Pessoas</h2>
+            </header>
             <ul className='lista-pessoa'>
                 {pessoas.map((pessoa) => (
                     <li className='pessoa' key={pessoa.id}>
@@ -49,7 +51,7 @@ function GerenciadorPessoas({grupoId, pessoas, onAtualizarPessoas }) {
                 />
                 <button className="criar-button" onClick={lidarCriarPessoa}>Adicionar Pessoa</button> 
             </div>
-        </div>
+        </section>
     );
 }
 
