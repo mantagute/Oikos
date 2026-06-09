@@ -1,6 +1,16 @@
 import api from './api';
 
 const paroquiaService = {
+  getListaParoquias: async () => {
+    const response = await api.get('/paroquias');
+    return response.data;
+  },
+
+  getParoquiaPorId: async (id) => {
+    const response = await api.get(`/paroquias/${id}`);
+    return response.data;
+  },
+
   criarParoquia: async (nome, senha) => {
     const response = await api.post('/paroquias', { nome, senha });
     return response.data;

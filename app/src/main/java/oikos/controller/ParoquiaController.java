@@ -35,6 +35,22 @@ public class ParoquiaController {
         this.servicoParoquias = servicoParoquias;
     }
 
+    @GetMapping("/{id}")
+    public ParoquiaResponse getParoquiaPorId(@PathVariable UUID id) {
+        Paroquia paroquia = servicoParoquias.getPorId(id);
+        return ParoquiaResponse.from(paroquia);
+    }
+
+    @GetMapping
+    public List<ParoquiaResponse> getListaParoquias() {
+        List<Paroquia> paroquias = servicoParoquias.getLista();
+        List<ParoquiaResponse> responses = new ArrayList<>();
+        for (Paroquia paroquia : paroquias) {
+            responses.add(ParoquiaResponse.from(paroquia));
+        }
+        return responses;
+    }
+
     @PostMapping
     public ResponseEntity<ParoquiaResponse> criarGrupo(@RequestBody CriarParoquiaRequest request) {
         String nome = request.nome();

@@ -1,0 +1,38 @@
+.pagina-404 {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  text-align: center;
+}
+
+.pagina-404-conteudo {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+}
+
+.pagina-404-codigo {
+  color: var(--oikos-accent);
+  font-family: var(--oikos-font-title);
+  font-size: 6rem;
+  line-height: 1;
+  margin: 0;
+}
+
+.pagina-404-titulo {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.pagina-404-descricao {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}

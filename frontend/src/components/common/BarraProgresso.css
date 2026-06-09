@@ -1,0 +1,100 @@
+.barra-progresso-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.barra-progresso-wrapper.completa {
+  animation: brilho 0.8s ease;
+}
+
+@keyframes brilho {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.08); }
+  100% { filter: brightness(1); }
+}
+
+.barra-progresso-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.barra-progresso-label {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.barra-progresso-valor {
+  color: var(--oikos-primary);
+  font-family: var(--oikos-font-title);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.barra-progresso {
+  background-color: rgba(196, 154, 43, 0.12);
+  border-radius: 100px;
+  height: 14px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.barra-progresso-preenchimento {
+  background: linear-gradient(90deg, var(--oikos-accent), var(--oikos-accent-light));
+  border-radius: 100px;
+  height: 100%;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.barra-progresso-preenchimento.completa {
+  background: linear-gradient(90deg, var(--oikos-accent), #5cb85c);
+  box-shadow: 0 0 12px rgba(92, 184, 92, 0.4);
+}
+
+.barra-progresso-porcentagem {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.barra-progresso-celebracao {
+  align-items: center;
+  animation: pulse 0.6s ease 0.3s both;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.barra-progresso-coroa {
+  color: var(--oikos-accent);
+  font-size: 1.2rem;
+}
+
+.barra-progresso-parabens {
+  color: var(--oikos-accent);
+  font-family: var(--oikos-font-title);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 700;
+}

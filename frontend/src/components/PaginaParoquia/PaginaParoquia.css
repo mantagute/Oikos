@@ -1,0 +1,256 @@
+.pagina-paroquia {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+}
+
+.pagina-paroquia-perfil {
+  text-align: center;
+}
+
+.pagina-paroquia-titulo {
+  font-family: var(--oikos-font-title);
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.pagina-paroquia-subtitulo {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+/* Painel de Notificações */
+.painel-notificacoes {
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: var(--oikos-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  width: 100%;
+}
+
+.painel-notificacoes-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .painel-notificacoes-footer {
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.dica-envio {
+  color: var(--oikos-text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Dashboard Analytics */
+.dashboard-global {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.indicador-card {
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: var(--oikos-shadow);
+  flex: 1 1 120px;
+  padding: 20px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .indicador-card {
+    flex: 1 1 40%;
+  }
+}
+
+.indicador-card h3 {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.indicador-card p {
+  color: var(--oikos-primary);
+  font-family: var(--oikos-font-title);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 10px 0 0;
+}
+
+.destaque-card {
+  background-color: var(--oikos-bg);
+  border-color: var(--oikos-accent);
+}
+
+.destaque-card h3 {
+  color: var(--oikos-accent);
+}
+
+.destaque-card p {
+  color: var(--oikos-accent);
+}
+
+/* Ranking */
+.dashboard-ranking {
+  width: 100%;
+}
+
+.dashboard-ranking h2 {
+  border-bottom: 2px solid var(--oikos-border);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+.ranking-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ranking-item {
+  align-items: center;
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: var(--oikos-shadow);
+  display: flex;
+  padding: 15px 20px;
+}
+
+@media (max-width: 600px) {
+  .ranking-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.ranking-posicao {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 50px;
+}
+
+.ranking-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ranking-info strong {
+  color: var(--oikos-primary);
+  font-family: var(--oikos-font-title);
+  font-size: 1.2rem;
+}
+
+.ranking-info small {
+  color: var(--oikos-text-secondary);
+}
+
+.ranking-stats {
+  align-items: center;
+  color: var(--oikos-primary);
+  display: flex;
+  font-weight: 700;
+  gap: 12px;
+}
+
+.badge-metas {
+  background-color: var(--oikos-accent);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+}
+
+/* Grupos Vinculados */
+.lista-grupos-vinculados {
+  width: 100%;
+}
+
+.lista-grupos-vinculados h3 {
+  margin-bottom: 16px;
+}
+
+.grupos-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.grupo-vinculado-item {
+  align-items: center;
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  cursor: pointer;
+  display: flex;
+  padding: 14px 16px;
+  transition: all 0.2s;
+}
+
+.grupo-vinculado-item:hover {
+  border-color: var(--oikos-accent);
+  box-shadow: var(--oikos-shadow);
+}
+
+.grupo-checkbox {
+  accent-color: var(--oikos-accent);
+  cursor: pointer;
+  height: 18px;
+  margin-right: 12px;
+  width: 18px;
+}
+
+.grupo-nome {
+  color: var(--oikos-primary);
+  font-family: var(--oikos-font-body);
+  user-select: none;
+}
+
+/* Skeleton Loading */
+.pagina-grupo-carregando {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, rgba(196, 154, 43, 0.08) 25%, rgba(196, 154, 43, 0.15) 50%, rgba(196, 154, 43, 0.08) 75%);
+  background-size: 200% 100%;
+  border-radius: var(--oikos-radius);
+  height: 60px;
+}
+
+@keyframes skeleton-pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

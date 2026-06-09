@@ -1,140 +1,108 @@
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import GerenciadorPessoas from './GerenciadorPessoas';
 import GerenciadorEventos from './GerenciadorEventos';
-import grupoService from '../../services/grupoService';
-import pessoaService from '../../services/pessoaService';
-import eventoService from '../../services/eventoService';
+import GerenciadorNotificacoes from './GerenciadorNotificacoes';
+import { useGrupo } from '../../hooks/useGrupo';
+import { useTitle } from '../../hooks/useTitle';
+import { BotaoOikos, InputOikos, ToastOikos, HeaderOikos, FooterOikos, BarraProgresso, SelectOikos } from '../common';
 import './PaginaGrupo.css';
 
 function PaginaGrupo() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const hook = useGrupo(id);
+  useTitle(hook.grupo?.nome);
 
-  const [grupo, setGrupo] = useState(null);
-  const [pessoas, setPessoas] = useState([]);
-  const [eventos, setEventos] = useState([]);
-  const [pessoaSelecionada, setPessoa] = useState(null);
-  const [eventoSelecionado, setEvento] = useState(null);
-  const [novaMeta, setNovaMeta] = useState(null);
-
-  useEffect(() => {
-    const carregarDados = async () => {
-      try {
-        const [dadosGrupo, dadosPessoas, dadosEventos] = await Promise.all([
-          grupoService.getGrupoPorId(id),
-          pessoaService.getListaPessoas(id),
-          eventoService.getListaEventos(id)
-        ]); 
-        setGrupo(dadosGrupo);
-        setPessoas(dadosPessoas);
-        setEventos(dadosEventos)
-      } catch (error) {
-        console.error('Erro ao carregar grupo:', error);
-      }
-    };
-
-    carregarDados();
-  }, [id]);
-
-  if (!grupo) {
-    return <div className="pagina-grupo">Carregando...</div>;
+  if (hook.erro) {
+    return (
+      <main className="pagina-grupo">
+        <HeaderOikos mostrarVoltar mostrarLogo />
+        <section className="pagina-grupo-perfil">
+          <p>{hook.erro}</p>
+          <BotaoOikos variante="secundario" onClick={() => navigate('/')}>
+            Voltar ao início
+          </BotaoOikos>
+        </section>
+        <FooterOikos />
+      </main>
+    );
   }
 
-  const lidarPontuar = async () => {
-    if (!pessoaSelecionada || !eventoSelecionado) {
-      return alert('Selecione uma pessoa e um evento para pontuar');
-    }
-    try {
-      await grupoService.registrarAtividade(id, pessoaSelecionada, eventoSelecionado);
-      const dadosGrupo = await grupoService.getGrupoPorId(id);
-      setGrupo(dadosGrupo);
-    } 
-    catch (error) {
-      console.error('Erro ao registrar atividade:', error);
-      alert('Erro ao registrar atividade.');
-    }
+  if (!hook.grupo) {
+    return (
+      <main className="pagina-grupo">
+        <HeaderOikos mostrarVoltar mostrarLogo />
+        <section className="pagina-grupo-carregando">
+          <div className="skeleton" />
+          <div className="skeleton" />
+          <div className="skeleton" />
+        </section>
+      </main>
+    );
   }
-
-  const onAtualizarPessoas = async () => {
-    try {
-      const dadosPessoas = await pessoaService.getListaPessoas(id);
-      setPessoas(dadosPessoas);
-    }
-    catch (error) {
-      console.error('Erro ao atualizar pessoas:', error);
-    }
-  }
-
-  const onAtualizarEventos = async () => {
-    try {
-      const dadosEventos = await eventoService.getListaEventos(id);
-      setEventos(dadosEventos);
-    } catch (error) {
-      console.error("Erro ao atualizar eventos:", error);
-    }
-  }
-
-  const lidarRedefinirMeta = async (meta) => {
-    try {
-      if (!meta) {
-        return alert("Insira a nova meta");
-      }
-      await grupoService.redefinirMetaGrupo(id, meta);
-      const dadosGrupo = await grupoService.getGrupoPorId(id);
-      setGrupo(dadosGrupo);
-      setNovaMeta('');
-    } catch (error) {
-      console.error("Erro ao redefinir a meta:", error);
-    }
-  }
-
-
 
   return (
-    <>
-      <div className="pagina-grupo">
-        <div className="pagina-grupo-header">
-          <button className="pagina-grupo-voltar" onClick={() => navigate('/')}>
-            &lt;&lt; Voltar
-          </button>
+    <main className="pagina-grupo">
+      <ToastOikos toast={hook.toast} onFechar={hook.fecharToast} />
+      <HeaderOikos mostrarVoltar mostrarLogo />
+
+      <section className="pagina-grupo-perfil">
+        <h1 className="pagina-grupo-titulo">{hook.grupo.nome}</h1>
+        <h3 className="pagina-grupo-categoria">CATEGORIA: {hook.grupo.classificacao}</h3>
+        <BarraProgresso atual={hook.grupo.pontuacaoAtual} meta={hook.grupo.meta} />
+        <div className="meta-container">
+          <InputOikos
+            type="number"
+            placeholder="Redefina a meta"
+            value={hook.novaMeta || ''}
+            onChange={(e) => hook.setNovaMeta(e.target.value)}
+          />
+          <BotaoOikos variante="secundario" onClick={() => hook.lidarRedefinirMeta(hook.novaMeta)}>
+            Aplicar
+          </BotaoOikos>
         </div>
-        <div className="pagina-grupo-perfil">
-          <h1 className="pagina-grupo-titulo">{grupo.nome}</h1>
-          <h2 className="pagina-grupo-meta">
-            meta: {grupo.pontuacaoAtual}/{grupo.meta}
-          </h2>
-          <div>
-            <input className='redefinir-meta-input' type='number' placeholder='Redefina a meta' value={novaMeta || ''} onChange={(e) => setNovaMeta(e.target.value)}></input>
-            <button className="redefinir-meta-button" onClick={() => {lidarRedefinirMeta(novaMeta)}}>Aplicar</button>
-          </div>
-          <h3 className="pagina-grupo-categoria">categoria: {grupo.classificacao}</h3>
-        </div>
-        <div className="pagina-grupo-pontuar">
-          <select className="inputPontuar" onChange={(e) => setPessoa(e.target.value)} value={pessoaSelecionada || ''}>
-            <option value="">Selecione uma pessoa</option>
-            {pessoas.map((pessoa) => (
-              <option key={pessoa.id} value={pessoa.id}>
-                {pessoa.nome}
-              </option>
-            ))}
-          </select>
-    
-          <select className="inputPontuar" onChange={(e) => setEvento(e.target.value)} value={eventoSelecionado || ''}>
-            <option value="">Selecione um evento</option>
-            {eventos.map((evento) => (
-              <option key={evento.id} value={evento.id}>
-                {evento.nome}
-              </option>
-            ))}
-          </select>
-    
-          <button className='pontuar-button' onClick={lidarPontuar}>Pontuar</button>
-        </div>
-      </div>
-      <GerenciadorPessoas grupoId={id} pessoas={pessoas} onAtualizarPessoas={onAtualizarPessoas} />
-      <GerenciadorEventos grupoId={id} eventos = {eventos} onAtualizarEventos={onAtualizarEventos}/>
-    </>
+      </section>
+
+      <section className="pagina-grupo-pontuar">
+        <header className="pontuar-header">
+          <h2>Registrar Atividade</h2>
+          <p className="pontuar-subtitulo">Atribua pontos a um membro pela participação</p>
+        </header>
+        <SelectOikos
+          placeholder="Selecione uma pessoa"
+          value={hook.pessoaSelecionada || ''}
+          onChange={(e) => hook.setPessoa(e.target.value)}
+        >
+          {hook.pessoas.map((pessoa) => (
+            <option key={pessoa.id} value={pessoa.id}>
+              {pessoa.nome}
+            </option>
+          ))}
+        </SelectOikos>
+
+        <SelectOikos
+          placeholder="Selecione um evento"
+          value={hook.eventoSelecionado || ''}
+          onChange={(e) => hook.setEvento(e.target.value)}
+        >
+          {hook.eventos.map((evento) => (
+            <option key={evento.id} value={evento.id}>
+              {evento.nome} ({evento.pontos} pts)
+            </option>
+          ))}
+        </SelectOikos>
+
+        <BotaoOikos variante="primario" onClick={hook.lidarPontuar}>
+          Pontuar
+        </BotaoOikos>
+      </section>
+
+      <GerenciadorPessoas grupoId={id} pessoas={hook.pessoas} onAtualizarPessoas={hook.onAtualizarPessoas} onErro={hook.mostrarToast} />
+      <GerenciadorEventos grupoId={id} eventos={hook.eventos} onAtualizarEventos={hook.onAtualizarEventos} onErro={hook.mostrarToast} />
+      <GerenciadorNotificacoes grupoId={id} notificacoes={hook.notificacoes} onAtualizarNotificacoes={hook.onAtualizarNotificacoes} />
+
+      <FooterOikos />
+    </main>
   );
 }
 
