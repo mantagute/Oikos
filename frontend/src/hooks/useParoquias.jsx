@@ -9,15 +9,17 @@ export function useParoquias() {
     const [novoNome, setNovoNome] = useState('');
     const [novaSenha, setNovaSenha] = useState('');
     const [senhasIn, setSenhasIn] = useState({});
+    const [erro, setErro] = useState(null);
 
     useEffect(() => {
         const carregarParoquias = async () => {
-        try {
-            const dados = await paroquiaService.getListaParoquias();
-            setParoquias(dados);
-        } catch (error) {
-            console.error('Erro ao buscar paroquias:', error);
-        }
+            try {
+                const dados = await paroquiaService.getListaParoquias();
+                setParoquias(dados);
+            } catch (error) {
+                console.error('Erro ao buscar paroquias:', error);
+                setErro('Não foi possível carregar as paróquias. Verifique sua conexão e tente novamente.');
+            }
         };
         carregarParoquias();
     }, [atualizador]);
@@ -36,20 +38,20 @@ export function useParoquias() {
             console.error('Erro ao criar paroquia:', error);
         }
     };
-    
+
     const lidarEntrarParoquia = async (paroquiaId) => {
         const senha = senhasIn[paroquiaId];
         if (!senha || !senha.trim()) return alert('Digite a senha da paróquia');
-    
+
         try {
             const resposta = await paroquiaService.autenticarSenhaParoquia(paroquiaId, senha);
-        
+
             if (resposta === true) {
                 navigate(`/paroquia/${paroquiaId}`);
             } else {
                 alert('Senha incorreta');
             }
-        
+
             setSenhasIn((prev) => ({ ...prev, [paroquiaId]: '' }));
         } 
         catch (error) {
@@ -57,21 +59,21 @@ export function useParoquias() {
             alert('Erro ao verificar senha.');
         }
     };
-    
+
     const lidarDeletarParoquia = async (paroquiaId) => {
         const senha = senhasIn[paroquiaId];
         if (!senha || !senha.trim())
             return alert('Digite a senha da paróquia para excluí-la');
-    
+
         try {
             const resposta = await paroquiaService.autenticarSenhaParoquia(paroquiaId, senha);
-        
+
             if (resposta === true) {
                 await paroquiaService.excluirParoquia(paroquiaId, senha);
             } else {
                 alert('Senha incorreta');
             }
-        
+
             setAtualizador((prev) => prev + 1);
             setSenhasIn((prev) => ({ ...prev, [paroquiaId]: '' }));
         } 
@@ -83,6 +85,7 @@ export function useParoquias() {
 
     return {
         paroquias,
+        erro,
         novoNome,
         setNovoNome,
         novaSenha,

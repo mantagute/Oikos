@@ -43,38 +43,3 @@
     flex-direction: row;
   }
 }
-
-.excluir-button {
-  border-color: black;
-  border-radius: 30px;
-  border-width: 1px;
-  cursor: pointer;
-  font-size: x-small;
-  margin-left: 15px;
-  padding: 3px 9px;
-}
-
-.excluir-button:hover {
-  background-color: darkgray;
-}
-
-.input-nova-pessoa {
-  border-bottom-left-radius: 15px;
-  border-color: black;
-  border-top-left-radius: 15px;
-  border-width: 1px;
-  padding: 3px 9px;
-}
-
-.criar-button {
-  border-bottom-right-radius: 15px;
-  border-color: black;
-  border-top-right-radius: 15px;
-  border-width: 1px;
-  cursor: pointer;
-  padding: 3px 20px;
-}
-
-.criar-button:hover {
-  background-color: darkgray;
-}

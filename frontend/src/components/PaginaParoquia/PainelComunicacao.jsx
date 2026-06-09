@@ -1,15 +1,17 @@
+import { InputOikos, BotaoOikos } from '../common';
+
 function PainelComunicacao({ hook }) {
   return (
     <>
       <section className="painel-notificacoes">
         <h2>Comunicação e Notificações</h2>
         
-        <textarea 
-          className="textarea-notificacao"
+        <InputOikos
+          multiline
+          rows={4}
           placeholder="Escreva a mensagem que deseja enviar..."
           value={hook.mensagemNotificacao}
           onChange={(e) => hook.setMensagemNotificacao(e.target.value)}
-          rows={4}
         />
         
         <footer className="painel-notificacoes-footer">
@@ -19,9 +21,9 @@ function PainelComunicacao({ hook }) {
               : `Enviando para ${hook.gruposSelecionados.length} grupo(s) selecionado(s).`}
           </p>
           
-          <button className="enviar-button" onClick={hook.lidarEnviarNotificacao}>
+          <BotaoOikos variante="primario" onClick={hook.lidarEnviarNotificacao}>
             Enviar Notificação
-          </button>
+          </BotaoOikos>
         </footer>
       </section>
 

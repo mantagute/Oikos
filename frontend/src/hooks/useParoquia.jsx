@@ -5,10 +5,11 @@ export function useParoquia(idParoquia) {
     const [paroquia, setParoquia] = useState(null);
     const [gruposVinculados, setGruposVinculados] = useState([]);
     const [mensagemNotificacao, setMensagemNotificacao] = useState('');
-    
+        
     // Array com IDs dos grupos que receberão a notificação específica. 
     // Se estiver vazio, a notificação vai para todos.
     const [gruposSelecionados, setGruposSelecionados] = useState([]);
+    const [erro, setErro] = useState(null);
 
     useEffect(() => {
         const carregarDados = async() => {
@@ -21,6 +22,7 @@ export function useParoquia(idParoquia) {
                 setGruposVinculados(dadosGruposVinculados);
             } catch (error) {
                 console.error('Erro ao carregar paroquia:', error);
+                setErro('Não foi possível carregar os dados da paróquia. Verifique sua conexão e tente novamente.');
             }
         }
         carregarDados();
@@ -45,7 +47,7 @@ export function useParoquia(idParoquia) {
     const alternarSelecaoGrupo = (grupoId) => {
         setGruposSelecionados((selecionadosAtuais) => {
             const jaEstaSelecionado = selecionadosAtuais.includes(grupoId);
-    
+
             if (jaEstaSelecionado) {
                 return selecionadosAtuais.filter((id) => id !== grupoId);
             } 
@@ -57,6 +59,7 @@ export function useParoquia(idParoquia) {
 
     return {
         paroquia,
+        erro,
         gruposVinculados,
         mensagemNotificacao,
         setMensagemNotificacao,

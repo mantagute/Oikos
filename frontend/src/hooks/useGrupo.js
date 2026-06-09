@@ -12,6 +12,7 @@ export function useGrupo(id) {
   const [pessoaSelecionada, setPessoa] = useState(null);
   const [eventoSelecionado, setEvento] = useState(null);
   const [novaMeta, setNovaMeta] = useState(null);
+  const [erro, setErro] = useState(null);
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -21,13 +22,14 @@ export function useGrupo(id) {
           pessoaService.getListaPessoas(id),
           eventoService.getListaEventos(id),
           notificacaoService.getListaNotificacoes(id)
-        ]); 
+        ]);
         setGrupo(dadosGrupo);
         setPessoas(dadosPessoas);
         setEventos(dadosEventos);
         setNotificacoes(dadosNotificacoes);
       } catch (error) {
         console.error('Erro ao carregar grupo:', error);
+        setErro('Não foi possível carregar os dados do grupo. Verifique sua conexão e tente novamente.');
       }
     };
 
@@ -42,7 +44,7 @@ export function useGrupo(id) {
       await grupoService.registrarAtividade(id, pessoaSelecionada, eventoSelecionado);
       const dadosGrupo = await grupoService.getGrupoPorId(id);
       setGrupo(dadosGrupo);
-    } 
+    }
     catch (error) {
       console.error('Erro ao registrar atividade:', error);
       alert('Erro ao registrar atividade.');
@@ -93,6 +95,7 @@ export function useGrupo(id) {
 
   return {
     grupo,
+    erro,
     pessoas,
     eventos,
     notificacoes,
