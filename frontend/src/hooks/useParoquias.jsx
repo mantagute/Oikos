@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import paroquiaService from '../services/paroquiaService';
+import { useToast } from '../components/common/useToast';
 
 export function useParoquias() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ export function useParoquias() {
     const [novaSenha, setNovaSenha] = useState('');
     const [senhasIn, setSenhasIn] = useState({});
     const [erro, setErro] = useState(null);
+    const { toast, mostrarToast, fecharToast } = useToast();
 
     useEffect(() => {
         const carregarParoquias = async () => {
@@ -25,14 +27,15 @@ export function useParoquias() {
     }, [atualizador]);
 
     const lidarCriarParoquia = async () => {
-        if (!novoNome.trim()) return alert('Digite um nome para a paroquia');
-        if (novoNome.trim() && !novaSenha.trim())
-            return alert('Digite uma senha para a nova paroquia');
+        if (!novoNome.trim()) return mostrarToast('Digite um nome para a nova paróquia.', 'erro');
+        if (!novaSenha.trim()) return mostrarToast('Digite uma senha para a nova paróquia.', 'erro');
+
         try {
             await paroquiaService.criarParoquia(novoNome, novaSenha);
             setNovoNome('');
             setNovaSenha('');
-            setAtualizador((prev) => prev + 1)
+            setAtualizador((prev) => prev + 1);
+            mostrarToast('Paróquia criada com sucesso!', 'sucesso');
         } 
         catch (error) {
             console.error('Erro ao criar paroquia:', error);
@@ -41,7 +44,7 @@ export function useParoquias() {
 
     const lidarEntrarParoquia = async (paroquiaId) => {
         const senha = senhasIn[paroquiaId];
-        if (!senha || !senha.trim()) return alert('Digite a senha da paróquia');
+        if (!senha || !senha.trim()) return mostrarToast('Digite a senha da paróquia.', 'erro');
 
         try {
             const resposta = await paroquiaService.autenticarSenhaParoquia(paroquiaId, senha);
@@ -49,29 +52,29 @@ export function useParoquias() {
             if (resposta === true) {
                 navigate(`/paroquia/${paroquiaId}`);
             } else {
-                alert('Senha incorreta');
+                mostrarToast('Senha incorreta. Tente novamente.', 'erro');
             }
 
             setSenhasIn((prev) => ({ ...prev, [paroquiaId]: '' }));
         } 
         catch (error) {
             console.error('Erro ao autenticar senha:', error);
-            alert('Erro ao verificar senha.');
+            mostrarToast('Erro ao verificar senha. Tente novamente.', 'erro');
         }
     };
 
     const lidarDeletarParoquia = async (paroquiaId) => {
         const senha = senhasIn[paroquiaId];
-        if (!senha || !senha.trim())
-            return alert('Digite a senha da paróquia para excluí-la');
+        if (!senha || !senha.trim()) return mostrarToast('Digite a senha da paróquia para excluí-la.', 'erro');
 
         try {
             const resposta = await paroquiaService.autenticarSenhaParoquia(paroquiaId, senha);
 
             if (resposta === true) {
                 await paroquiaService.excluirParoquia(paroquiaId, senha);
+                mostrarToast('Paróquia excluída.', 'sucesso');
             } else {
-                alert('Senha incorreta');
+                mostrarToast('Senha incorreta. Tente novamente.', 'erro');
             }
 
             setAtualizador((prev) => prev + 1);
@@ -79,7 +82,7 @@ export function useParoquias() {
         } 
         catch (error) {
             console.error('Erro ao excluir paróquia:', error);
-            alert('Erro ao verificar senha.');
+            mostrarToast('Erro ao verificar senha. Tente novamente.', 'erro');
         }
     };
 
@@ -92,6 +95,8 @@ export function useParoquias() {
         setNovaSenha,
         senhasIn,
         setSenhasIn,
+        toast,
+        fecharToast,
         lidarCriarParoquia,
         lidarEntrarParoquia,
         lidarDeletarParoquia,

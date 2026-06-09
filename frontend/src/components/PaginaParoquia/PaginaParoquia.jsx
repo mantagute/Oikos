@@ -3,6 +3,7 @@ import { useParoquia } from '../../hooks/useParoquia';
 import DashboardGlobais from './DashboardGlobais';
 import RankingGrupos from './RankingGrupos';
 import PainelComunicacao from './PainelComunicacao';
+import { ToastOikos } from '../common';
 import './PaginaParoquia.css';
 
 function PaginaParoquia() {
@@ -34,6 +35,7 @@ function PaginaParoquia() {
 
     return (
         <main className="pagina-paroquia">
+            <ToastOikos toast={hook.toast} onFechar={hook.fecharToast}/>
             <header className="pagina-paroquia-header">
                 <button className="pagina-paroquia-voltar" onClick={() => navigate('/')}>
                     &lt;&lt; Voltar ao Início

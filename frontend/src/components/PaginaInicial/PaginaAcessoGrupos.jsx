@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useGrupos } from '../../hooks/useGrupos';
 import ListaGrupos  from './ListaGrupos';
+import { ToastOikos } from '../common';
 import './PaginaInicial.css';
 
 function PaginaAcessoGrupos() {
@@ -9,6 +10,7 @@ function PaginaAcessoGrupos() {
 
   return (
     <main className="pagina-inicial">
+      <ToastOikos toast={hookGrupos.toast} onFechar={hookGrupos.fecharToast}/>
       <header className="pagina-inicial-header">
         <button className="pagina-grupo-voltar" onClick={() => navigate('/')}>
           &lt;&lt; Voltar
@@ -19,7 +21,13 @@ function PaginaAcessoGrupos() {
         </div>
       </header>
 
-      <ListaGrupos hookGrupos={hookGrupos} />
+      {hookGrupos.erro ? 
+      (
+        <section className="pagina-inicial-grupos">
+          <p style={{ color: 'var(--oikos-text-secondary)', textAlign: 'center' }}> {hookGrupos.erro}</p>
+        </section>
+      ) : (
+      <ListaGrupos hookGrupos={hookGrupos} />)}
     </main>
   );
 }

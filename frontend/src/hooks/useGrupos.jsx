@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import grupoService from '../services/grupoService';
+import { useToast } from '../components/common/useToast';
 
 export function useGrupos() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ export function useGrupos() {
     const [novaSenha, setNovaSenha] = useState('');
     const [senhasIn, setSenhasIn] = useState({});
     const [erro, setErro] = useState(null);
+    const { toast, mostrarToast, fecharToast } = useToast();
 
     useEffect(() => {
         const carregarGrupos = async () => {
@@ -25,23 +27,24 @@ export function useGrupos() {
     }, [atualizador]);
 
     const lidarComCriarGrupo = async () => {
-        if (!novoNome.trim()) return alert('Digite um nome para o novo grupo');
-        if (novoNome.trim() && !novaSenha.trim())
-            return alert('Digite uma senha para o novo grupo');
-        
+        if (!novoNome.trim()) return mostrarToast('Digite um nome para o novo grupo.', 'erro');
+        if (!novaSenha.trim()) return mostrarToast('Digite uma senha para o novo grupo.', 'erro');
+
         try {
             await grupoService.criarGrupo(novoNome, novaSenha);
             setNovoNome('');
             setNovaSenha('');
             setAtualizador((prev) => prev + 1);
-        } catch (error) {
+            mostrarToast('Grupo criado com sucesso!', 'sucesso');
+        } 
+        catch (error) {
             console.error('Erro ao criar grupo:', error);
         }
     };
 
     const lidarEntrarGrupo = async (grupoId) => {
         const senha = senhasIn[grupoId];
-        if (!senha || !senha.trim()) return alert('Digite a senha do grupo');
+        if (!senha || !senha.trim()) return mostrarToast('Digite a senha do grupo.', 'erro');
 
         try {
             const resposta = await grupoService.autenticarSenhaGrupo(grupoId, senha);
@@ -50,29 +53,30 @@ export function useGrupos() {
                 navigate(`/grupo/${grupoId}`);
             } 
             else {
-                alert('Senha incorreta');
+                mostrarToast('Senha incorreta. Tente novamente.', 'erro');
             }
 
             setSenhasIn((prev) => ({ ...prev, [grupoId]: '' }));
         } 
         catch (error) {
             console.error('Erro ao autenticar senha:', error);
-            alert('Erro ao verificar senha.');
+            mostrarToast('Erro ao verificar senha. Tente novamente.', 'erro');
         }
     };
 
     const lidarDeletarGrupo = async (grupoId) => {
         const senha = senhasIn[grupoId];
-        if (!senha || !senha.trim())
-            return alert('Digite a senha do grupo para excluí-lo');
+        if (!senha || !senha.trim()) return mostrarToast('Digite a senha do grupo para excluí-lo.', 'erro');
 
         try {
             const resposta = await grupoService.autenticarSenhaGrupo(grupoId, senha);
 
             if (resposta === true) {
                 await grupoService.excluirGrupo(grupoId, senha);
-            } else {
-                alert('Senha incorreta');
+                mostrarToast('Grupo excluído.', 'sucesso');
+            } 
+            else {
+                mostrarToast('Senha incorreta. Tente novamente.', 'erro');
             }
 
             setAtualizador((prev) => prev + 1);
@@ -80,7 +84,7 @@ export function useGrupos() {
         } 
         catch (error) {
             console.error('Erro ao autenticar senha:', error);
-            alert('Erro ao verificar senha.');
+            mostrarToast('Erro ao verificar senha. Tente novamente.', 'erro');
         }
     };
 
@@ -93,6 +97,8 @@ export function useGrupos() {
         setNovaSenha,
         senhasIn,
         setSenhasIn,
+        toast,
+        fecharToast,
         lidarComCriarGrupo,
         lidarEntrarGrupo,
         lidarDeletarGrupo,

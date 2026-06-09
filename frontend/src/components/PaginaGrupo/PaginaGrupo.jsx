@@ -3,7 +3,7 @@ import GerenciadorPessoas from './GerenciadorPessoas';
 import GerenciadorEventos from './GerenciadorEventos';
 import GerenciadorNotificacoes from './GerenciadorNotificacoes';
 import { useGrupo } from '../../hooks/useGrupo';
-import { BotaoOikos, InputOikos } from '../common';
+import { BotaoOikos, InputOikos, ToastOikos } from '../common';
 import './PaginaGrupo.css';
 
 function PaginaGrupo() {
@@ -35,6 +35,7 @@ function PaginaGrupo() {
 
   return (
     <main className="pagina-grupo">
+      <ToastOikos toast={hook.toast} onFechar={hook.fecharToast}/>
       <header className="pagina-grupo-header">
         <button className="pagina-grupo-voltar" onClick={() => navigate('/')}>
           &lt;&lt; Voltar

@@ -3,6 +3,7 @@ import grupoService from '../services/grupoService';
 import pessoaService from '../services/pessoaService';
 import eventoService from '../services/eventoService';
 import notificacaoService from '../services/notificacaoService';
+import { useToast } from '../components/common/useToast';
 
 export function useGrupo(id) {
   const [grupo, setGrupo] = useState(null);
@@ -13,6 +14,7 @@ export function useGrupo(id) {
   const [eventoSelecionado, setEvento] = useState(null);
   const [novaMeta, setNovaMeta] = useState(null);
   const [erro, setErro] = useState(null);
+  const { toast, mostrarToast, fecharToast } = useToast();
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -38,16 +40,17 @@ export function useGrupo(id) {
 
   const lidarPontuar = async () => {
     if (!pessoaSelecionada || !eventoSelecionado) {
-      return alert('Selecione uma pessoa e um evento para pontuar');
+      return mostrarToast('Selecione uma pessoa e um evento para pontuar.', 'erro');
     }
     try {
       await grupoService.registrarAtividade(id, pessoaSelecionada, eventoSelecionado);
       const dadosGrupo = await grupoService.getGrupoPorId(id);
       setGrupo(dadosGrupo);
-    }
+      mostrarToast('Atividade registrada! Seu grupo agradece.', 'sucesso');
+    } 
     catch (error) {
       console.error('Erro ao registrar atividade:', error);
-      alert('Erro ao registrar atividade.');
+      mostrarToast('Erro ao registrar atividade. Tente novamente.', 'erro');
     }
   }
 
@@ -55,7 +58,7 @@ export function useGrupo(id) {
     try {
       const dadosPessoas = await pessoaService.getListaPessoas(id);
       setPessoas(dadosPessoas);
-    }
+    } 
     catch (error) {
       console.error('Erro ao atualizar pessoas:', error);
     }
@@ -77,19 +80,18 @@ export function useGrupo(id) {
     } catch (error) {
       console.error("Erro ao atualizar notificacoes:", error);
     }
-  }
+  };
 
   const lidarRedefinirMeta = async (meta) => {
     try {
-      if (!meta) {
-        return alert("Insira a nova meta");
-      }
+      if (!meta) return mostrarToast('Insira a nova meta.', 'erro');
       await grupoService.redefinirMetaGrupo(id, meta);
       const dadosGrupo = await grupoService.getGrupoPorId(id);
       setGrupo(dadosGrupo);
       setNovaMeta('');
+      mostrarToast('Meta atualizada com sucesso!', 'sucesso');
     } catch (error) {
-      console.error("Erro ao redefinir a meta:", error);
+      console.error('Erro ao redefinir a meta:', error);
     }
   }
 
@@ -105,6 +107,8 @@ export function useGrupo(id) {
     setEvento,
     novaMeta,
     setNovaMeta,
+    toast,
+    fecharToast,
     lidarPontuar,
     onAtualizarPessoas,
     onAtualizarEventos,
