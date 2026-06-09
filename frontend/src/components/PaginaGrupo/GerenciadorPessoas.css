@@ -6,6 +6,23 @@
   padding: 24px;
 }
 
+.secao-header {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.secao-icone {
+  color: var(--oikos-accent);
+  flex-shrink: 0;
+  font-size: 1.3rem;
+}
+
+.secao-header h2 {
+  margin: 0;
+}
+
 .lista-pessoa {
   display: flex;
   flex-direction: column;
@@ -29,6 +46,16 @@
   color: var(--oikos-primary);
   font-family: var(--oikos-font-body);
   font-weight: 700;
+}
+
+.estado-vazio {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin: 16px 0 20px;
+  padding: 20px;
+  text-align: center;
 }
 
 .caixa-criar-pessoa {

@@ -1,33 +1,34 @@
-import { useNavigate } from 'react-router-dom';
+import { useTitle } from '../../hooks/useTitle';
 import { useGrupos } from '../../hooks/useGrupos';
-import ListaGrupos  from './ListaGrupos';
-import { ToastOikos } from '../common';
+import ListaGrupos from './ListaGrupos';
+import { ToastOikos, HeaderOikos, FooterOikos } from '../common';
 import './PaginaInicial.css';
 
 function PaginaAcessoGrupos() {
-  const navigate = useNavigate();
+  useTitle('Acesso de Membros');
   const hookGrupos = useGrupos();
 
   return (
     <main className="pagina-inicial">
-      <ToastOikos toast={hookGrupos.toast} onFechar={hookGrupos.fecharToast}/>
-      <header className="pagina-inicial-header">
-        <button className="pagina-grupo-voltar" onClick={() => navigate('/')}>
-          &lt;&lt; Voltar
-        </button>
-        <div>
-          <h1>Acesso de Membros</h1>
-          <h2>Gerencie e acesse seus grupos</h2>
-        </div>
-      </header>
+      <ToastOikos toast={hookGrupos.toast} onFechar={hookGrupos.fecharToast} />
+      <HeaderOikos
+        mostrarVoltar
+        mostrarLogo
+        titulo="Acesso de Membros"
+        subtitulo="Gerencie e acesse seus grupos"
+      />
 
-      {hookGrupos.erro ? 
-      (
+      {hookGrupos.erro ? (
         <section className="pagina-inicial-grupos">
-          <p style={{ color: 'var(--oikos-text-secondary)', textAlign: 'center' }}> {hookGrupos.erro}</p>
+          <p style={{ color: 'var(--oikos-text-secondary)', textAlign: 'center' }}>
+            {hookGrupos.erro}
+          </p>
         </section>
       ) : (
-      <ListaGrupos hookGrupos={hookGrupos} />)}
+        <ListaGrupos hookGrupos={hookGrupos} />
+      )}
+
+      <FooterOikos />
     </main>
   );
 }

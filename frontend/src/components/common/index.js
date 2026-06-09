@@ -2,3 +2,7 @@ export { BotaoOikos } from './BotaoOikos';
 export { InputOikos } from './InputOikos';
 export { CardOikos } from './CardOikos';
 export { ToastOikos }  from './ToastOikos';
+export { HeaderOikos } from './HeaderOikos';
+export { FooterOikos } from './FooterOikos';
+export { BarraProgresso } from './BarraProgresso';
+export { SelectOikos } from './SelectOikos';

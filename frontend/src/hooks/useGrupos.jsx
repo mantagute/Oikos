@@ -65,6 +65,7 @@ export function useGrupos() {
     };
 
     const lidarDeletarGrupo = async (grupoId) => {
+        if (!window.confirm('Tem certeza que deseja excluir este grupo? Esta ação não pode ser desfeita.')) return;
         const senha = senhasIn[grupoId];
         if (!senha || !senha.trim()) return mostrarToast('Digite a senha do grupo para excluí-lo.', 'erro');
 

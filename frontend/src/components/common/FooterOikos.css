@@ -1,0 +1,35 @@
+.footer-oikos {
+  border-top: 1px solid rgba(168, 152, 128, 0.2);
+  margin-top: 48px;
+  padding: 40px 20px;
+  width: 100%;
+}
+
+.footer-oikos-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.footer-oikos-logo {
+  height: auto;
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+  width: 110px;
+}
+
+.footer-oikos-logo:hover {
+  opacity: 0.85;
+}
+
+.footer-oikos-tagline {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-title);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}

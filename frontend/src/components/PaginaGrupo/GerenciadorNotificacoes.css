@@ -6,6 +6,49 @@
   padding: 24px;
 }
 
+.secao-header {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.secao-icone {
+  color: var(--oikos-accent);
+  flex-shrink: 0;
+  font-size: 1.3rem;
+}
+
+.secao-header h2 {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.badge-naoLidas {
+  background-color: var(--oikos-accent);
+  border-radius: 100px;
+  color: white;
+  font-family: var(--oikos-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 20px;
+  padding: 3px 7px;
+  text-align: center;
+}
+
+.estado-vazio {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.95rem;
+  font-style: italic;
+  margin: 16px 0 20px;
+  padding: 20px;
+  text-align: center;
+}
+
 .lista-notificacoes {
   display: flex;
   flex-direction: column;

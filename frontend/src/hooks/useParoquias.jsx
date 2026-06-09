@@ -64,6 +64,7 @@ export function useParoquias() {
     };
 
     const lidarDeletarParoquia = async (paroquiaId) => {
+        if (!window.confirm('Tem certeza que deseja excluir esta paróquia? Esta ação não pode ser desfeita.')) return;
         const senha = senhasIn[paroquiaId];
         if (!senha || !senha.trim()) return mostrarToast('Digite a senha da paróquia para excluí-la.', 'erro');
 

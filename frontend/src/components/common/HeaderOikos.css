@@ -1,0 +1,63 @@
+.header-oikos {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.header-oikos-com-titulo {
+  gap: 16px;
+}
+
+/* Back Button — discreet */
+.header-oikos-voltar {
+  align-items: center;
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--oikos-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--oikos-font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.header-oikos-voltar:hover {
+  color: var(--oikos-accent);
+}
+
+/* Logo — hero */
+.header-oikos-logo {
+  height: auto;
+  width: 180px;
+}
+
+/* Titles */
+.header-oikos-titulos {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+.header-oikos-titulo {
+  font-family: var(--oikos-font-title);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-oikos-subtitulo {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+}

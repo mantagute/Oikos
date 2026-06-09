@@ -46,8 +46,10 @@ export function useGrupo(id) {
       await grupoService.registrarAtividade(id, pessoaSelecionada, eventoSelecionado);
       const dadosGrupo = await grupoService.getGrupoPorId(id);
       setGrupo(dadosGrupo);
+      setPessoa(null);
+      setEvento(null);
       mostrarToast('Atividade registrada! Seu grupo agradece.', 'sucesso');
-    } 
+    }
     catch (error) {
       console.error('Erro ao registrar atividade:', error);
       mostrarToast('Erro ao registrar atividade. Tente novamente.', 'erro');
@@ -110,6 +112,7 @@ export function useGrupo(id) {
     toast,
     fecharToast,
     lidarPontuar,
+    mostrarToast,
     onAtualizarPessoas,
     onAtualizarEventos,
     onAtualizarNotificacoes,
