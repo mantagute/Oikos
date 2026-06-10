@@ -107,5 +107,11 @@ public class ParoquiaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("{id}/solicitar-vinculo")
+    public ResponseEntity<Void> solicitarVinculo(@PathVariable UUID id, @RequestBody VincularGrupoRequest request) {
+        servicoParoquias.solicitarVinculo(id, request.idGrupo());
+        return ResponseEntity.ok().build();
+    }
+
 }
 

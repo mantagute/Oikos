@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { BsPeople } from 'react-icons/bs';
 import pessoaService from '../../services/pessoaService';
 import { InputOikos, BotaoOikos } from '../common';
+import { useConfirm } from '../../hooks/useConfirm';
 import './GerenciadorPessoas.css';
 
 function GerenciadorPessoas({ grupoId, pessoas, onAtualizarPessoas, onErro }) {
+  const { confirmar, ConfirmDialog } = useConfirm();
   const [novoNome, setNovoNome] = useState('');
 
   const lidarCriarPessoa = async () => {
@@ -20,7 +22,8 @@ function GerenciadorPessoas({ grupoId, pessoas, onAtualizarPessoas, onErro }) {
   };
 
   const lidarExcluirPessoa = async (pessoaId) => {
-    if (!window.confirm('Tem certeza que deseja excluir esta pessoa?')) return;
+    const confirmado = await confirmar('Tem certeza que deseja excluir esta pessoa?');
+    if (!confirmado) return;
     try {
       await pessoaService.excluirPessoa(grupoId, pessoaId);
       onAtualizarPessoas();
@@ -30,7 +33,9 @@ function GerenciadorPessoas({ grupoId, pessoas, onAtualizarPessoas, onErro }) {
   };
 
   return (
-    <section className="gerenciador-pessoas">
+    <>
+      {ConfirmDialog}
+      <section className="gerenciador-pessoas">
       <header className="secao-header">
         <BsPeople className="secao-icone" />
         <h2>Pessoas</h2>
@@ -64,6 +69,7 @@ function GerenciadorPessoas({ grupoId, pessoas, onAtualizarPessoas, onErro }) {
         </BotaoOikos>
       </div>
     </section>
+    </>
   );
 }
 

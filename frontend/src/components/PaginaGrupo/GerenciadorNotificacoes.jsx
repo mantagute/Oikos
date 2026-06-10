@@ -1,9 +1,11 @@
 import { BsBell } from 'react-icons/bs';
 import notificacaoService from '../../services/notificacaoService';
 import { BotaoOikos } from '../common';
+import { useConfirm } from '../../hooks/useConfirm';
 import './GerenciadorNotificacoes.css';
 
-function GerenciadorNotificacoes({ grupoId, notificacoes, onAtualizarNotificacoes }) {
+function GerenciadorNotificacoes({ grupoId, notificacoes, onAtualizarNotificacoes, onMostrarToast }) {
+  const { confirmar, ConfirmDialog } = useConfirm();
   const lidarMarcarComoConcluido = async (notificacaoId) => {
     try {
       await notificacaoService.marcarComoLida(grupoId, notificacaoId);
@@ -13,8 +15,20 @@ function GerenciadorNotificacoes({ grupoId, notificacoes, onAtualizarNotificacoe
     }
   };
 
+  const lidarAceitarVinculo = async (notificacaoId) => {
+    try {
+      await notificacaoService.aceitarVinculo(grupoId, notificacaoId);
+      onAtualizarNotificacoes();
+      if (onMostrarToast) onMostrarToast('Vínculo aceito! Agora a paróquia pode acompanhar os dados do grupo.', 'sucesso');
+    } catch (error) {
+      console.error('Erro ao aceitar vínculo:', error);
+      if (onMostrarToast) onMostrarToast('Erro ao aceitar vínculo. Tente novamente.', 'erro');
+    }
+  };
+
   const lidarExcluirNotificacao = async (notificacaoId) => {
-    if (!window.confirm('Tem certeza que deseja excluir esta notificação?')) return;
+    const confirmado = await confirmar('Tem certeza que deseja excluir esta notificação?');
+    if (!confirmado) return;
     try {
       await notificacaoService.excluirNotificacao(grupoId, notificacaoId);
       onAtualizarNotificacoes();
@@ -26,7 +40,9 @@ function GerenciadorNotificacoes({ grupoId, notificacoes, onAtualizarNotificacoe
   const naoLidas = notificacoes.filter((n) => !n.lida).length;
 
   return (
-    <section className="gerenciador-notificacoes">
+    <>
+      {ConfirmDialog}
+      <section className="gerenciador-notificacoes">
       <header className="secao-header">
         <BsBell className="secao-icone" />
         <h2>
@@ -48,7 +64,15 @@ function GerenciadorNotificacoes({ grupoId, notificacoes, onAtualizarNotificacoe
             >
               <p className="notificacao-mensagem">{notificacao.mensagem}</p>
               <div className="notificacao-acoes">
-                {!notificacao.lida && (
+                {notificacao.tipo === 'VINCULO' && !notificacao.lida && (
+                  <BotaoOikos
+                    variante="primario"
+                    onClick={() => lidarAceitarVinculo(notificacao.id)}
+                  >
+                    Aceitar Vínculo
+                  </BotaoOikos>
+                )}
+                {notificacao.tipo !== 'VINCULO' && !notificacao.lida && (
                   <BotaoOikos
                     variante="primario"
                     onClick={() => lidarMarcarComoConcluido(notificacao.id)}
@@ -65,6 +89,7 @@ function GerenciadorNotificacoes({ grupoId, notificacoes, onAtualizarNotificacoe
         </ul>
       )}
     </section>
+    </>
   );
 }
 

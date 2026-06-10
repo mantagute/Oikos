@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import paroquiaService from '../services/paroquiaService';
 import  useToast  from './useToast';
+import { useConfirm } from './useConfirm';
 
 export function useParoquias() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ export function useParoquias() {
     const [senhasIn, setSenhasIn] = useState({});
     const [erro, setErro] = useState(null);
     const { toast, mostrarToast, fecharToast } = useToast();
+    const { confirmar, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         const carregarParoquias = async () => {
@@ -64,7 +66,8 @@ export function useParoquias() {
     };
 
     const lidarDeletarParoquia = async (paroquiaId) => {
-        if (!window.confirm('Tem certeza que deseja excluir esta paróquia? Esta ação não pode ser desfeita.')) return;
+        const confirmado = await confirmar('Tem certeza que deseja excluir esta paróquia? Esta ação não pode ser desfeita.');
+        if (!confirmado) return;
         const senha = senhasIn[paroquiaId];
         if (!senha || !senha.trim()) return mostrarToast('Digite a senha da paróquia para excluí-la.', 'erro');
 
@@ -98,6 +101,7 @@ export function useParoquias() {
         setSenhasIn,
         toast,
         fecharToast,
+        ConfirmDialog,
         lidarCriarParoquia,
         lidarEntrarParoquia,
         lidarDeletarParoquia,

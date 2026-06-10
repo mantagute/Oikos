@@ -15,10 +15,12 @@ public class Notificacao extends Entidade {
     private String mensagem;
     private UUID idParoquia;
     private boolean lida;
+    private String tipo;
 
     /**
-     * Cria uma nova Notificação com mensagem e paróquia remetente definidos.
+     * Cria uma nova Notificação com mensagem, paróquia remetente e tipo definidos.
      * O estado inicial de leitura é sempre {@code false}.
+     * O tipo padrão é "COMUM".
      *
      * @param mensagem   Conteúdo da notificação.
      * @param idParoquia UUID da paróquia que enviou a notificação.
@@ -28,6 +30,21 @@ public class Notificacao extends Entidade {
         this.mensagem = mensagem;
         this.idParoquia = idParoquia;
         this.lida = false;
+        this.tipo = "COMUM";
+    }
+
+    /**
+     * Cria uma nova Notificação com tipo personalizado.
+     *
+     * @param mensagem   Conteúdo da notificação.
+     * @param idParoquia UUID da paróquia remetente.
+     * @param tipo       Tipo da notificação ("COMUM" ou "VINCULO").
+     */
+    public Notificacao(String mensagem, UUID idParoquia, String tipo) {
+        this.mensagem = mensagem;
+        this.idParoquia = idParoquia;
+        this.lida = false;
+        this.tipo = (tipo != null) ? tipo : "COMUM";
     }
 
     /**
@@ -64,6 +81,15 @@ public class Notificacao extends Entidade {
      */
     public Boolean isLida() {
         return lida;
+    }
+
+    /**
+     * Retorna o tipo da notificação.
+     *
+     * @return "COMUM" para notificação padrão, "VINCULO" para solicitação de vínculo.
+     */
+    public String getTipo() {
+        return (tipo != null) ? tipo : "COMUM";
     }
 
     /**

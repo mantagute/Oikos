@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
         // Permite que o frontend (Vite) acesse o backend durante o desenvolvimento
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }

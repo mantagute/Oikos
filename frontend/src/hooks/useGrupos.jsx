@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import grupoService from '../services/grupoService';
 import  useToast  from './useToast';
+import { useConfirm } from './useConfirm';
 
 export function useGrupos() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ export function useGrupos() {
     const [senhasIn, setSenhasIn] = useState({});
     const [erro, setErro] = useState(null);
     const { toast, mostrarToast, fecharToast } = useToast();
+    const { confirmar, ConfirmDialog } = useConfirm();
 
     useEffect(() => {
         const carregarGrupos = async () => {
@@ -65,7 +67,8 @@ export function useGrupos() {
     };
 
     const lidarDeletarGrupo = async (grupoId) => {
-        if (!window.confirm('Tem certeza que deseja excluir este grupo? Esta ação não pode ser desfeita.')) return;
+        const confirmado = await confirmar('Tem certeza que deseja excluir este grupo? Esta ação não pode ser desfeita.');
+        if (!confirmado) return;
         const senha = senhasIn[grupoId];
         if (!senha || !senha.trim()) return mostrarToast('Digite a senha do grupo para excluí-lo.', 'erro');
 
@@ -100,6 +103,7 @@ export function useGrupos() {
         setSenhasIn,
         toast,
         fecharToast,
+        ConfirmDialog,
         lidarComCriarGrupo,
         lidarEntrarGrupo,
         lidarDeletarGrupo,

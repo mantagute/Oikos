@@ -11,6 +11,7 @@ function PaginaAcessoParoquias() {
   return (
     <main className="pagina-inicial">
       <ToastOikos toast={hookParoquias.toast} onFechar={hookParoquias.fecharToast} />
+      {hookParoquias.ConfirmDialog}
       <HeaderOikos
         mostrarVoltar
         mostrarLogo

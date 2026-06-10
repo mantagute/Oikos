@@ -6,3 +6,5 @@ export { HeaderOikos } from './HeaderOikos';
 export { FooterOikos } from './FooterOikos';
 export { BarraProgresso } from './BarraProgresso';
 export { SelectOikos } from './SelectOikos';
+export { ExibicaoMetasBatidas } from './ExibicaoMetasBatidas';
+export { ConfirmDialogOikos } from './ConfirmDialogOikos';

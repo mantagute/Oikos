@@ -25,6 +25,11 @@ const notificacaoService = {
     excluirNotificacao: async(grupoId, notificacaoId) => {
     const response = await api.delete(`/grupos/${grupoId}/notificacoes/${notificacaoId}`)
     return response.data;
+    },
+
+    aceitarVinculo: async(grupoId, notificacaoId) => {
+    const response = await api.post(`/grupos/${grupoId}/notificacoes/${notificacaoId}/aceitar-vinculo`)
+    return response.data;
     }
 
 }

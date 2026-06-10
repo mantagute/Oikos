@@ -11,6 +11,7 @@ function PaginaAcessoGrupos() {
   return (
     <main className="pagina-inicial">
       <ToastOikos toast={hookGrupos.toast} onFechar={hookGrupos.fecharToast} />
+      {hookGrupos.ConfirmDialog}
       <HeaderOikos
         mostrarVoltar
         mostrarLogo

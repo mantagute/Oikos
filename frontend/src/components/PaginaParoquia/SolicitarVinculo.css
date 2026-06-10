@@ -1,0 +1,45 @@
+.solicitar-vinculo-section {
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: var(--oikos-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  width: 100%;
+}
+
+.solicitar-vinculo-descricao {
+  color: var(--oikos-text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.grupo-solicitar-item {
+  justify-content: space-between;
+}
+
+.botao-solicitar {
+  background-color: var(--oikos-accent);
+  border: none;
+  border-radius: 100px;
+  color: white;
+  cursor: pointer;
+  font-family: var(--oikos-font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 6px 16px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.botao-solicitar:hover {
+  background-color: var(--oikos-accent-light);
+  transform: scale(1.02);
+}
+
+.botao-solicitar:active {
+  transform: scale(0.98);
+}
