@@ -22,6 +22,14 @@ public class PersistenciaJson<TipoDado> implements Persistivel<TipoDado> {
     private final Supplier<TipoDado> valorPadrao;
     private final ObjectMapper mapper;
 
+    /**
+     * Configura a persistência com o caminho do arquivo, o tipo de referência
+     * para desserialização e um fornecedor de valor padrão.
+     *
+     * @param caminhoArquivo Caminho do arquivo JSON para leitura/escrita.
+     * @param tipoDado       TypeReference para orientar o Jackson na desserialização.
+     * @param valorPadrao    Supplier que fornece o valor retornado quando o arquivo não existe ou está vazio.
+     */
     public PersistenciaJson(String caminhoArquivo, TypeReference<TipoDado> tipoDado, Supplier<TipoDado> valorPadrao) {
         this.arquivo = new File(caminhoArquivo);
         this.tipoDado = tipoDado;
@@ -30,6 +38,14 @@ public class PersistenciaJson<TipoDado> implements Persistivel<TipoDado> {
         this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    /**
+     * Serializa os dados recebidos e grava no arquivo JSON configurado.
+     *
+     * @param dados Os dados a serem persistidos.
+     * @return O nome do arquivo gravado.
+     * @throws RuntimeException se ocorrer erro de escrita.
+     */
+    @Override
     public String salvar(TipoDado dados) {
         try {
             mapper.writeValue(arquivo, dados);
@@ -39,6 +55,14 @@ public class PersistenciaJson<TipoDado> implements Persistivel<TipoDado> {
         }
     }
 
+    /**
+     * Lê o arquivo JSON configurado e desserializa seu conteúdo.
+     * Retorna o valor padrão se o arquivo não existir, estiver vazio
+     * ou não puder ser lido corretamente.
+     *
+     * @return Os dados recuperados ou o valor padrão.
+     */
+    @Override
     public TipoDado recuperar() {
         if (!arquivo.exists() || arquivo.length() == 0) {
             return valorPadrao.get();

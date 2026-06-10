@@ -24,6 +24,13 @@ public class ServicoEventos extends ServicoEntidades<Evento> {
         super(servicoGrupos);
     }
 
+    /**
+     * Retorna o gerenciador de eventos do grupo informado.
+     *
+     * @param grupoId UUID do grupo.
+     * @return Gerenciador de eventos do grupo.
+     */
+    @Override
     protected Gerenciador<Evento> getGerenciadorPorGrupoId(UUID grupoId) {
         Grupo grupo = servicoGrupos.getPorId(grupoId);
         Gerenciador<Evento> gerenciador = grupo.getGerenciadorEventos();

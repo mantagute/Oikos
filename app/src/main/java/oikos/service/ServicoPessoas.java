@@ -24,11 +24,16 @@ public class ServicoPessoas extends ServicoEntidades<Pessoa> {
         super(servicoGrupos);
     }
     
+    /**
+     * Retorna o gerenciador de pessoas do grupo informado.
+     *
+     * @param grupoId UUID do grupo.
+     * @return Gerenciador de pessoas do grupo.
+     */
+    @Override
     protected Gerenciador<Pessoa> getGerenciadorPorGrupoId(UUID grupoId) {
         Grupo grupo = servicoGrupos.getPorId(grupoId);
-        Gerenciador<Pessoa> gerenciador = grupo.getGerenciadorPessoas();
-
-        return gerenciador;
+        return grupo.getGerenciadorPessoas();
     }
 
     /**
