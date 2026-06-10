@@ -116,7 +116,7 @@ O front-end é uma SPA componentizada e responsiva. O back-end expõe uma API RE
 
 ## Diagrama UML
 
-![Diagrama de Classes UML](docs/uml.png)
+![Diagrama de Classes UML](./docs/OikosUML.drawio.png)
 
 > O diagrama cobre as camadas de domínio, serviços, gerenciamento e persistência. A camada de API REST (controllers, DTOs, tratamento de exceções) foi omitida intencionalmente, conforme descrito na documentação da Atividade 2.
 
