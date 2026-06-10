@@ -20,5 +20,10 @@ public interface Classificavel {
         else {return "Iniciante";}
     }
 
+    /**
+     * Retorna a classificação textual da entidade com base no número de metas batidas.
+     *
+     * @return Classificação como {@code String} (ex: "Iniciante", "Bronze", "Ouro").
+     */
     public String getClassificacao();
 }

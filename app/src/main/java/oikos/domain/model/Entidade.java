@@ -24,6 +24,13 @@ public abstract class Entidade {
     public UUID getId() {
         return id;
     }
+
+    /**
+     * Define o identificador único desta entidade.
+     * Utilizado durante a desserialização para restaurar o UUID persistido.
+     *
+     * @param id O {@link UUID} a ser atribuído a esta entidade.
+     */
     public void setId(UUID id) {
         this.id = id;
     }

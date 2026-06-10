@@ -79,7 +79,7 @@ public class Notificacao extends Entidade {
      *
      * @return {@code true} se já foi lida, {@code false} caso contrário.
      */
-    public Boolean isLida() {
+    public boolean isLida() {
         return lida;
     }
 

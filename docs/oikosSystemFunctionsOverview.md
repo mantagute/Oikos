@@ -28,8 +28,13 @@ O sistema deve permitir:
 5. pontuar o Grupo com base no registro de atividade de Pessoa em Evento;
 6. definir e redefinir meta de pontuação;
 7. acompanhar pontuacaoAtual e metasBatidas;
-8. persistir os dados de domínio em JSON;
-9. recuperar os dados persistidos entre execuções do sistema.
+8. criar e excluir paróquias com proteção por senha;
+9. vincular e desvincular grupos a uma paróquia;
+10. enviar notificações de paróquias para grupos vinculados;
+11. gerenciar notificações (listar, marcar como lida, excluir);
+12. solicitar e aceitar vínculo entre paróquia e grupo;
+13. persistir os dados de domínio em JSON;
+14. recuperar os dados persistidos entre execuções do sistema.
 
 ## 3. Levantamento detalhado das funções por componente
 
@@ -88,6 +93,12 @@ Regras funcionais:
 - o grupo deve existir;
 - após redefinir a meta, o sistema persiste a lista de grupos.
 
+- redefinirSenha(UUID, String, String): void
+Descrição: redefine a senha de um grupo, validando a senha atual antes da troca.
+Regras funcionais:
+- senha atual deve ser validada antes da alteração;
+- após redefinir a senha, o sistema persiste a lista de grupos.
+
 - salvar(): String
 Descrição: delega a gravação da lista de grupos para persistencia.salvar(this.grupos).
 Resultado esperado: retorna o nome do arquivo persistido.
@@ -107,6 +118,7 @@ Classe central do domínio, responsável por autenticação local do grupo, pont
 - senha: String
 - gerenciadorPessoas: Gerenciador<Pessoa>
 - gerenciadorEventos: Gerenciador<Evento>
+- gerenciadorNotificacoes: Gerenciador<Notificacao>
 - meta: int
 - pontuacaoAtual: int
 - metasBatidas: int
@@ -118,6 +130,9 @@ Descrição: retorna o nome do grupo.
 
 - setNome(String): void
 Descrição: altera o nome do grupo.
+
+- setSenha(String): void
+Descrição: altera a senha do grupo diretamente (usado pelo Jackson na desserialização).
 
 - autenticarSenha(String): boolean
 Descrição: compara a senha informada com a senha do grupo para validação.
@@ -161,6 +176,12 @@ Descrição: fornece acesso ao gerenciador de eventos do grupo.
 
 - setGerenciadorEventos(Gerenciador<Evento>): void
 Descrição: define o gerenciador de eventos do grupo.
+
+- getGerenciadorNotificacoes(): Gerenciador<Notificacao>
+Descrição: fornece acesso ao gerenciador de notificações do grupo.
+
+- setGerenciadorNotificacoes(Gerenciador<Notificacao>): void
+Descrição: define o gerenciador de notificações do grupo.
 
 - adicionarPontos(int): void
 Descrição: incrementa a pontuação do grupo. Se o acumulado atingir a meta, incrementa metasBatidas e mantém o saldo excedente em pontuacaoAtual.
@@ -305,7 +326,50 @@ Descrição: valida que o nome não seja vazio e que os pontos sejam maiores que
 - getGerenciadorPorGrupoId(UUID): Gerenciador<Evento> (protegido)  
 Descrição: retorna o gerenciador de eventos do grupo informado.
 
-### 3.10 PersistenciaJson
+### 3.10 ServicoEscopoMaior (abstrata)
+
+**Responsabilidade geral**
+Classe abstrata base para serviços que gerenciam entidades de escopo maior (Grupos e Paróquias). Encapsula CRUD, persistência em JSON e autenticação por senha.
+
+**Atributos**
+
+- entidades: List<TipoEntidade>
+- persistencia: Persistivel<List<TipoEntidade>>
+
+**Funções**
+
+- criar(String, String): TipoEntidade
+Descrição: valida e cria uma nova entidade, adiciona à lista em memória e persiste.
+Regras funcionais:
+- nome não pode ser vazio;
+- senha não pode ser vazia;
+- nome deve ser único ignorando maiúsculas/minúsculas.
+
+- getLista(): List<TipoEntidade>
+Descrição: retorna uma cópia da lista de entidades em memória.
+
+- getPorId(UUID): TipoEntidade
+Descrição: localiza uma entidade pelo UUID. Lança NoSuchElementException se não encontrada.
+
+- excluir(UUID, String): void
+Descrição: exclui uma entidade após validar a senha informada. Lança SecurityException se a senha estiver incorreta.
+
+- salvar(): String
+Descrição: persiste a lista atual de entidades no arquivo JSON. Retorna o nome do arquivo gerado.
+
+- recuperar(): void
+Descrição: recupera a lista de entidades do arquivo JSON na inicialização (executado automaticamente pelo Spring via @PostConstruct).
+
+- posRecuperar(): void (hook)
+Descrição: hook executado após a recuperação dos dados. Subclasses sobrescrevem para restaurar referências transientes.
+
+- instanciar(String, String): TipoEntidade (protegido, abstrato)
+Descrição: subclasses implementam para instanciar a entidade concreta com nome e senha.
+
+- getNome(TipoEntidade): String (protegido, abstrato)
+Descrição: subclasses implementam para retornar o nome da entidade, usado na validação de duplicatas.
+
+### 3.11 PersistenciaJson
 
 **Responsabilidade geral**  
 Implementar a persistência genérica em arquivo JSON, desacoplando os serviços dos detalhes de leitura e escrita.
@@ -327,6 +391,152 @@ Resultado esperado: retorna o nome do arquivo gravado.
 Descrição: lê o arquivo configurado e desserializa seu conteúdo.
 Resultado esperado: retorna os dados recuperados ou o valor padrão quando o arquivo não existir, estiver vazio ou não puder ser lido corretamente.
 
+### 3.12 Notificacao
+
+**Responsabilidade geral**
+Representar uma notificação enviada por uma Paroquia a um Grupo, incluindo solicitações de vínculo.
+
+**Atributos**
+
+- mensagem: String
+- idParoquia: UUID
+- lida: boolean
+- tipo: String
+
+**Funções**
+
+- getMensagem(): String
+Descrição: retorna o conteúdo da notificação.
+
+- setMensagem(String): void
+Descrição: atualiza o conteúdo da notificação.
+
+- getIdParoquia(): UUID
+Descrição: retorna o UUID da paróquia que enviou esta notificação.
+
+- isLida(): boolean
+Descrição: indica se a notificação já foi lida pelo grupo destinatário.
+
+- getTipo(): String
+Descrição: retorna o tipo da notificação ("COMUM" para padrão, "VINCULO" para solicitação de vínculo).
+
+- marcarComoLida(): void
+Descrição: marca a notificação como lida.
+
+### 3.13 Paroquia
+
+**Responsabilidade geral**
+Representar uma paróquia que pode gerenciar múltiplos grupos, enviar notificações e solicitar vínculo.
+
+**Atributos**
+
+- nome: String
+- senha: String
+- gerenciadorGrupos: Gerenciador<Grupo>
+
+**Funções**
+
+- getNome(): String
+Descrição: retorna o nome da paróquia.
+
+- setNome(String): void
+Descrição: altera o nome da paróquia.
+
+- autenticarSenha(String): boolean
+Descrição: compara a senha informada com a senha da paróquia para validação.
+
+- getGerenciadorGrupos(): Gerenciador<Grupo>
+Descrição: fornece acesso ao gerenciador de grupos vinculados à paróquia.
+
+### 3.14 ServicoParoquias
+
+**Responsabilidade geral**
+Serviço que gerencia as paróquias, estendendo ServicoEscopoMaior. Responsável por vinculação de grupos, envio de notificações e solicitação de vínculo.
+
+**Atributos**
+
+- servicoGrupos: ServicoGrupos
+
+**Funções**
+
+- criar(String, String): Paroquia (herdado)
+Descrição: cria uma nova paróquia com nome e senha.
+Regras funcionais:
+- nome não pode ser vazio;
+- senha não pode ser vazia;
+- nome deve ser único, ignorando diferença entre maiúsculas e minúsculas.
+
+- getLista(): List<Paroquia> (herdado)
+Descrição: retorna uma cópia da lista de paróquias.
+
+- getPorId(UUID): Paroquia (herdado)
+Descrição: localiza e retorna a paróquia pelo UUID informado.
+
+- excluir(UUID, String): void (herdado)
+Descrição: exclui uma paróquia mediante confirmação de senha.
+
+- vincularGrupo(UUID, UUID): void
+Descrição: vincula um grupo a uma paróquia.
+Regras funcionais:
+- grupo não pode já estar vinculado à paróquia;
+- após vincular, persiste a lista de paróquias.
+
+- desvincularGrupo(UUID, UUID): void
+Descrição: remove o vínculo entre um grupo e uma paróquia.
+
+- solicitarVinculo(UUID, UUID): void
+Descrição: envia uma notificação de solicitação de vínculo de uma paróquia para um grupo.
+Regras funcionais:
+- grupo não pode já estar vinculado;
+- não pode haver solicitação pendente do mesmo par para o mesmo grupo;
+- a notificação criada possui tipo "VINCULO".
+
+- enviarNotificacoes(UUID, String, List<UUID>): void
+Descrição: envia notificações para grupos vinculados à paróquia.
+Regras funcionais:
+- mensagem não pode ser vazia;
+- se gruposIds for nulo, envia para todos os grupos vinculados;
+- se gruposIds for especificado, todos devem estar vinculados à paróquia.
+
+- salvar(): String (herdado)
+Descrição: delega a gravação da lista de paróquias para persistencia.salvar().
+Resultado esperado: retorna o nome do arquivo persistido (paroquias.json).
+
+- recuperar(): void (herdado)
+Descrição: recupera a lista de paróquias do arquivo JSON na inicialização.
+
+### 3.15 ServicoNotificacoes
+
+**Responsabilidade geral**
+Serviço de notificações que especializa ServicoEntidades, gerenciando notificações em grupos e coordenando aceitação de vínculos.
+
+**Atributos**
+
+- servicoParoquias: ServicoParoquias
+
+**Funções**
+
+- getLista(UUID): List<Notificacao> (herdado)
+Descrição: retorna a lista de notificações do grupo informado.
+
+- getPorId(UUID, UUID): Notificacao (herdado)
+Descrição: busca uma notificação pelo UUID no grupo informado.
+
+- adicionar(UUID, Notificacao): void
+Descrição: adiciona uma notificação ao grupo, validando que a mensagem não seja vazia.
+
+- remover(UUID, UUID): void (herdado)
+Descrição: remove uma notificação do grupo informado e persiste.
+
+- marcarComoLida(UUID, UUID): void
+Descrição: marca uma notificação como lida e persiste a alteração.
+
+- aceitarVinculo(UUID, UUID): void
+Descrição: aceita uma solicitação de vínculo, vinculando o grupo à paróquia remetente e removendo a notificação.
+Regras funcionais:
+- a notificação deve ser do tipo "VINCULO";
+- delega o vínculo para ServicoParoquias.vincularGrupo().
+
 ## 4. Interfaces e funções contratuais
 
 ### 4.1 Pontuavel
@@ -342,6 +552,9 @@ Descrição: contrato para reset de pontuação.
 - getPontuacaoAtual():int
 Descrição: contrato para consultar pontuação.
 
+- setPontuacaoAtual(int): void
+Descrição: contrato para definir diretamente o valor da pontuação atual.
+
 **Aplicação no sistema**
 
 - implementada por Grupo para consolidar o comportamento de pontuação coletiva.
@@ -355,7 +568,7 @@ Descrição: contrato para autenticação por senha.
 
 **Aplicação no sistema**
 
-- implementada por Grupo para validar acesso e ações protegidas.
+- implementada por Grupo e Paroquia para validar acesso e ações protegidas.
 
 ### 4.3 Classificavel
 
@@ -364,6 +577,9 @@ Descrição: contrato para autenticação por senha.
 - classificar(int): String (default)  
 Descrição: retorna uma classificação textual baseada no número de metas batidas.  
 Regras: Iniciante (0), Bronze (≥1), Prata (≥3), Ouro (≥5), Diamante (≥10).
+
+- getClassificacao(): String
+Descrição: contrato para expor a classificação textual da entidade.
 
 **Aplicação no sistema**
 
@@ -426,14 +642,40 @@ Descrição: contrato para recuperar dados salvos.
 2. ServicoGrupos.salvar() delega a gravação para PersistenciaJson<List<Grupo>>.
 3. Os dados são gravados em data/grupos.json.
 4. Na inicialização, ServicoGrupos.recuperar() recupera a lista salva.
-5. Após recuperar os dados, o serviço restaura grupoOrigem nos gerenciadores de pessoas e eventos.
+5. Após recuperar os dados, o serviço restaura grupoOrigem nos gerenciadores de pessoas, eventos e notificações.
+
+### 5.7 Gestão de paróquias
+
+1. Usuário informa dados da paróquia (nome e senha).
+2. ServicoParoquias cria a paróquia ou realiza autenticação.
+3. Paróquia pode vincular ou desvincular grupos existentes.
+4. A alteração é persistida em data/paroquias.json.
+
+### 5.8 Gestão de notificações e vínculo
+
+1. Paróquia solicita vínculo a um grupo via ServicoParoquias.solicitarVinculo().
+2. Uma notificação do tipo "VINCULO" é adicionada ao grupo destinatário.
+3. Grupo aceita o vínculo via ServicoNotificacoes.aceitarVinculo().
+4. O vínculo é efetivado e a notificação é removida.
+5. Paróquia também pode enviar notificações comuns para grupos vinculados.
+
+### 5.9 Persistência de paróquias
+
+1. ServicoParoquias mantém a lista de paróquias como raiz do estado persistido.
+2. ServicoParoquias.salvar() delega a gravação para PersistenciaJson<List<Paroquia>>.
+3. Os dados são gravados em data/paroquias.json.
+4. Na inicialização, ServicoParoquias.recuperar() recupera a lista salva.
 
 ## 6. Regras funcionais consolidadas
 
 - Um Grupo só pode ser acessado mediante autenticação.
+- Uma Paroquia só pode ser acessada mediante autenticação.
 - Pessoa e Evento devem estar vinculados ao Grupo que está sendo operado.
 - Toda operação de pontuação altera pontuacaoAtual de forma consistente.
 - Meta pode ser redefinida conforme política do grupo, desde que seja maior que zero.
 - O estado de progresso do grupo inclui meta, pontuacaoAtual e metasBatidas.
+- Notificações possuem tipo "COMUM" (padrão) ou "VINCULO" (solicitação de vínculo).
+- Um grupo não pode receber solicitações de vínculo duplicadas e pendentes da mesma paróquia.
+- A aceitação de vínculo vincula automaticamente o grupo à paróquia solicitante.
 - Dados precisam ser persistidos entre execuções do sistema.
-- A persistência deve gravar a lista de grupos em data/grupos.json.
+- A persistência deve gravar a lista de grupos em data/grupos.json e a lista de paróquias em data/paroquias.json.

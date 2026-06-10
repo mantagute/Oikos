@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * e possui um nome para identificação no sistema.
  */
 public class Pessoa extends Entidade {
-    String nome;
+    private String nome;
 
     /**
      * Cria uma nova Pessoa com o nome especificado.

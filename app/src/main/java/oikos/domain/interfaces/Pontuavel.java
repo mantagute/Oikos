@@ -25,5 +25,10 @@ public interface Pontuavel {
      */
     void reiniciarPontos();
 
+    /**
+     * Define diretamente o valor da pontuação atual.
+     *
+     * @param valor Novo valor da pontuação.
+     */
     void setPontuacaoAtual(int valor);
 }

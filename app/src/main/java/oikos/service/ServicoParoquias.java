@@ -14,28 +14,64 @@ import oikos.domain.model.Grupo;
 import oikos.domain.model.Notificacao;
 
 
+/**
+ * Serviço que gerencia as paróquias no sistema, estendendo {@link ServicoEscopoMaior}.
+ * Responsável por operações específicas de paróquias: vinculação de grupos,
+ * desvinculação, solicitação de vínculo e envio de notificações em massa.
+ */
 @Service
 public class ServicoParoquias extends ServicoEscopoMaior<Paroquia> {
     private final ServicoGrupos servicoGrupos;
 
-
+    /**
+     * Cria a instância de persistência JSON configurada para paróquias.
+     *
+     * @return {@link PersistenciaJson} configurada para {@code List<Paroquia>}.
+     */
     private static PersistenciaJson<List<Paroquia>> criarPersistencia() {
         return new PersistenciaJson<List<Paroquia>>("../data/paroquias.json",new TypeReference<List<Paroquia>>() {}, () -> new ArrayList<>());
     }
-    
+
+    /**
+     * Construtor padrão. Inicializa a persistência e vincula o serviço de grupos.
+     *
+     * @param servicoGrupos Serviço de grupos para operações que envolvem grupos.
+     */
     public ServicoParoquias(ServicoGrupos servicoGrupos) {
         super(criarPersistencia());
         this.servicoGrupos = servicoGrupos;
     }
 
+    /**
+     * Instancia uma nova {@link Paroquia} com nome e senha.
+     *
+     * @param nome  Nome da paróquia.
+     * @param senha Senha da paróquia.
+     * @return Nova instância de {@link Paroquia}.
+     */
+    @Override
     protected Paroquia instanciar(String nome, String senha) {
         return new Paroquia(nome, senha);
     }
 
+    /**
+     * Retorna o nome de uma paróquia. Usado pela superclasse para validação de duplicatas.
+     *
+     * @param paroquia A paróquia cujo nome se deseja obter.
+     * @return O nome da paróquia.
+     */
+    @Override
     protected String getNome(Paroquia paroquia) {
         return paroquia.getNome();
     }
 
+    /**
+     * Vincula um grupo a uma paróquia.
+     *
+     * @param idParoquia UUID da paróquia.
+     * @param idGrupo    UUID do grupo a ser vinculado.
+     * @throws IllegalArgumentException se o grupo já estiver vinculado à paróquia.
+     */
     public void vincularGrupo(UUID idParoquia, UUID idGrupo) {
         Paroquia paroquia = getPorId(idParoquia);
         Grupo grupo = servicoGrupos.getPorId(idGrupo);
@@ -46,12 +82,26 @@ public class ServicoParoquias extends ServicoEscopoMaior<Paroquia> {
         salvar();
     }
 
+    /**
+     * Remove o vínculo entre um grupo e uma paróquia.
+     *
+     * @param idParoquia UUID da paróquia.
+     * @param idGrupo    UUID do grupo a ser desvinculado.
+     */
     public void desvincularGrupo(UUID idParoquia, UUID idGrupo) {
         Paroquia paroquia = getPorId(idParoquia);
         paroquia.getGerenciadorGrupos().removerEntidade(idGrupo);
         salvar();
     }
 
+    /**
+     * Envia uma solicitação de vínculo de uma paróquia para um grupo.
+     * Cria uma notificação do tipo "VINCULO" no grupo destinatário.
+     *
+     * @param idParoquia UUID da paróquia solicitante.
+     * @param idGrupo    UUID do grupo destinatário.
+     * @throws IllegalArgumentException se o grupo já estiver vinculado ou já houver solicitação pendente.
+     */
     public void solicitarVinculo(UUID idParoquia, UUID idGrupo) {
         Paroquia paroquia = getPorId(idParoquia);
         Grupo grupo = servicoGrupos.getPorId(idGrupo);

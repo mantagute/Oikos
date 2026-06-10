@@ -76,6 +76,9 @@ public class ServicoGrupos extends ServicoEscopoMaior<Grupo> {
             if (grupo.getGerenciadorPessoas() != null) {
                 grupo.getGerenciadorPessoas().setGrupoOrigem(grupo);
             }
+            if (grupo.getGerenciadorNotificacoes() != null) {
+                grupo.getGerenciadorNotificacoes().setGrupoOrigem(grupo);
+            }
         }
     }
 
