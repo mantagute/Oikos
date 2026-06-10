@@ -1,0 +1,55 @@
+.confirm-overlay {
+  align-items: center;
+  animation: confirm-overlay-entrar 0.2s ease;
+  background: rgba(107, 58, 31, 0.25);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 2000;
+}
+
+.confirm-dialog {
+  animation: confirm-dialog-entrar 0.25s ease;
+  background: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: 0 12px 32px rgba(107, 58, 31, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  padding: 28px;
+  width: 90%;
+}
+
+.confirm-mensagem {
+  color: var(--oikos-primary);
+  font-family: var(--oikos-font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+.confirm-acoes {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+@keyframes confirm-overlay-entrar {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirm-dialog-entrar {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

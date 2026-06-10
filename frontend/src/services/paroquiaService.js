@@ -45,6 +45,11 @@ const paroquiaService = {
   enviarNotificacoes: async (id, mensagem, gruposIds = null) => {
     const response = await api.post(`/paroquias/${id}/notificacoes`, { mensagem, gruposIds });
     return response.data;
+  },
+
+  solicitarVinculo: async (id, idGrupo) => {
+    const response = await api.post(`/paroquias/${id}/solicitar-vinculo`, { idGrupo });
+    return response.data;
   }
 };
 

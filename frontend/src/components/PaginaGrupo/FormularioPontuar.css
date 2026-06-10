@@ -1,0 +1,41 @@
+.pagina-grupo-pontuar {
+  background-color: white;
+  border-radius: var(--oikos-radius);
+  border: var(--oikos-border);
+  box-shadow: var(--oikos-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 24px;
+}
+
+.pontuar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.pontuar-header h2 {
+  margin: 0;
+}
+
+.pontuar-subtitulo {
+  color: var(--oikos-text-secondary);
+  font-family: var(--oikos-font-body);
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .pagina-grupo-pontuar {
+    align-items: flex-end;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .pontuar-header {
+    flex: 1 1 100%;
+  }
+}

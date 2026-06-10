@@ -1,5 +1,4 @@
-function RankingGrupos({ grupos }) {
-  // Ranking ordenado: 1º por metas batidas, 2º por pontuação
+function RankingGrupos({ grupos, onDesvincular }) {
   const ranking = [...grupos].sort((a, b) => {
     if (b.metasBatidas !== a.metasBatidas) return b.metasBatidas - a.metasBatidas;
     return b.pontuacaoAtual - a.pontuacaoAtual;
@@ -23,6 +22,11 @@ function RankingGrupos({ grupos }) {
                 <span>{grupo.pontuacaoAtual} / {grupo.meta} pts</span>
                 <span className="badge-metas">{grupo.metasBatidas} metas</span>
               </div>
+              {onDesvincular && (
+                <button className="botao-desvincular" onClick={() => onDesvincular(grupo.id)}>
+                  Desvincular
+                </button>
+              )}
             </article>
           ))}
         </div>

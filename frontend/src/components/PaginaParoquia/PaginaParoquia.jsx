@@ -4,6 +4,7 @@ import { useTitle } from '../../hooks/useTitle';
 import DashboardGlobais from './DashboardGlobais';
 import RankingGrupos from './RankingGrupos';
 import PainelComunicacao from './PainelComunicacao';
+import SolicitarVinculo from './SolicitarVinculo';
 import { ToastOikos, HeaderOikos, FooterOikos, BotaoOikos } from '../common';
 import './PaginaParoquia.css';
 
@@ -43,6 +44,7 @@ function PaginaParoquia() {
   return (
     <main className="pagina-paroquia">
       <ToastOikos toast={hook.toast} onFechar={hook.fecharToast} />
+      {hook.ConfirmDialog}
       <HeaderOikos mostrarVoltar mostrarLogo />
 
       <section className="pagina-paroquia-perfil">
@@ -52,7 +54,13 @@ function PaginaParoquia() {
 
       <DashboardGlobais grupos={hook.gruposVinculados} />
 
-      <RankingGrupos grupos={hook.gruposVinculados} />
+      <RankingGrupos grupos={hook.gruposVinculados} onDesvincular={hook.lidarDesvincularGrupo} />
+
+      <SolicitarVinculo
+        todosGrupos={hook.todosGrupos}
+        gruposVinculados={hook.gruposVinculados}
+        onSolicitarVinculo={hook.lidarSolicitarVinculo}
+      />
 
       <PainelComunicacao hook={hook} />
 

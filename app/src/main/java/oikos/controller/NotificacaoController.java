@@ -51,7 +51,8 @@ public class NotificacaoController {
 
     @PostMapping 
     public ResponseEntity<NotificacaoResponse> criarNotificacao(@PathVariable UUID grupoId, @RequestBody CriarNotificacaoRequest request) {
-        Notificacao novaNotificacao = new Notificacao(request.mensagem(), request.idParoquia());
+        String tipo = (request.tipo() != null) ? request.tipo() : "COMUM";
+        Notificacao novaNotificacao = new Notificacao(request.mensagem(), request.idParoquia(), tipo);
         servicoNotificacoes.adicionar(grupoId, novaNotificacao);
         
         NotificacaoResponse response = NotificacaoResponse.from(novaNotificacao);
@@ -70,6 +71,12 @@ public class NotificacaoController {
         servicoNotificacoes.remover(grupoId, notificacaoId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{notificacaoId}/aceitar-vinculo")
+    public ResponseEntity<Void> aceitarVinculo(@PathVariable UUID grupoId, @PathVariable UUID notificacaoId) {
+        servicoNotificacoes.aceitarVinculo(grupoId, notificacaoId);
+        return ResponseEntity.ok().build();
     }
 
 }

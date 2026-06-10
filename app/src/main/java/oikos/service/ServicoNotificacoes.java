@@ -9,9 +9,12 @@ import oikos.domain.model.Notificacao;
 
 @Service
 public class ServicoNotificacoes extends ServicoEntidades<Notificacao>{
-    
-    public ServicoNotificacoes(ServicoGrupos servicoGrupos) {
+
+    private final ServicoParoquias servicoParoquias;
+
+    public ServicoNotificacoes(ServicoGrupos servicoGrupos, ServicoParoquias servicoParoquias) {
         super(servicoGrupos);
+        this.servicoParoquias = servicoParoquias;
     }
 
     protected Gerenciador<Notificacao> getGerenciadorPorGrupoId(UUID grupoId) {
@@ -32,6 +35,16 @@ public class ServicoNotificacoes extends ServicoEntidades<Notificacao>{
     public void marcarComoLida(UUID grupoId, UUID notificacaoId) {
         Notificacao notificacao = getPorId(grupoId, notificacaoId);
         notificacao.marcarComoLida();
+        servicoGrupos.salvar();
+    }
+
+    public void aceitarVinculo(UUID grupoId, UUID notificacaoId) {
+        Notificacao notificacao = getPorId(grupoId, notificacaoId);
+        if (!"VINCULO".equals(notificacao.getTipo())) {
+            throw new IllegalArgumentException("Esta notificação não é uma solicitação de vínculo.");
+        }
+        servicoParoquias.vincularGrupo(notificacao.getIdParoquia(), grupoId);
+        getGerenciadorPorGrupoId(grupoId).removerEntidade(notificacaoId);
         servicoGrupos.salvar();
     }
 }

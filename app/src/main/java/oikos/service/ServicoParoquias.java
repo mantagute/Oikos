@@ -52,6 +52,29 @@ public class ServicoParoquias extends ServicoEscopoMaior<Paroquia> {
         salvar();
     }
 
+    public void solicitarVinculo(UUID idParoquia, UUID idGrupo) {
+        Paroquia paroquia = getPorId(idParoquia);
+        Grupo grupo = servicoGrupos.getPorId(idGrupo);
+
+        if (paroquia.getGerenciadorGrupos().getPorId(idGrupo) != null) {
+            throw new IllegalArgumentException("Grupo já vinculado a esta paróquia");
+        }
+
+        boolean jaSolicitado = grupo.getGerenciadorNotificacoes().getListaEntidades().stream()
+            .anyMatch(notificacao -> "VINCULO".equals(notificacao.getTipo()) && idParoquia.equals(notificacao.getIdParoquia()) && !notificacao.isLida());
+        if (jaSolicitado) {
+            throw new IllegalArgumentException("Já existe uma solicitação de vínculo pendente para este grupo.");
+        }
+
+        Notificacao notificacao = new Notificacao(
+            "A paróquia \"" + paroquia.getNome() + "\" está solicitando vínculo. Aceite para compartilhar seus dados.",
+            idParoquia,
+            "VINCULO"
+        );
+        grupo.getGerenciadorNotificacoes().adicionarEntidade(notificacao);
+        servicoGrupos.salvar();
+    }
+
     /**
      * Envia uma notificação para grupos vinculados à paróquia.
      * Se {@code gruposIds} for nulo, envia para todos os grupos vinculados.

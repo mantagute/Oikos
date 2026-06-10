@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { BsCalendarEvent } from 'react-icons/bs';
 import eventoService from '../../services/eventoService';
 import { InputOikos, BotaoOikos } from '../common';
+import { useConfirm } from '../../hooks/useConfirm';
 import './GerenciadorEventos.css';
 
 function GerenciadorEventos({ grupoId, eventos, onAtualizarEventos, onErro }) {
+  const { confirmar, ConfirmDialog } = useConfirm();
   const [novoNome, setNovoNome] = useState('');
   const [pontos, setPontos] = useState(0);
 
@@ -22,7 +24,8 @@ function GerenciadorEventos({ grupoId, eventos, onAtualizarEventos, onErro }) {
   };
 
   const lidarExcluirEvento = async (eventoId) => {
-    if (!window.confirm('Tem certeza que deseja excluir este evento?')) return;
+    const confirmado = await confirmar('Tem certeza que deseja excluir este evento?');
+    if (!confirmado) return;
     try {
       await eventoService.excluirEvento(grupoId, eventoId);
       onAtualizarEventos();
@@ -32,7 +35,9 @@ function GerenciadorEventos({ grupoId, eventos, onAtualizarEventos, onErro }) {
   };
 
   return (
-    <section className="gerenciador-eventos">
+    <>
+      {ConfirmDialog}
+      <section className="gerenciador-eventos">
       <header className="secao-header">
         <BsCalendarEvent className="secao-icone" />
         <h2>Eventos</h2>
@@ -74,6 +79,7 @@ function GerenciadorEventos({ grupoId, eventos, onAtualizarEventos, onErro }) {
         </BotaoOikos>
       </div>
     </section>
+    </>
   );
 }
 
