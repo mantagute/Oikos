@@ -78,14 +78,6 @@ cd Oikos
 
 Mantenha esse terminal aberto. O servidor sobe em `http://localhost:8080`.
 
-Caso algum erro ocorra nessa etapa, tente reinstalar o gradlew com:
-
-```bash
-gradle wrapper
-./gradlew wrapper --gradle-version=9.6.1
-./gradlew build
-```
-
 **3. Em um novo terminal, inicie o front-end:**
 
 ```bash
