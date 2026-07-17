@@ -14,6 +14,7 @@ import oikos.domain.interfaces.Autenticavel;
  */
 public class Paroquia extends Entidade implements Autenticavel{
     private String nome;
+    @JsonProperty("senha")
     private String senha;
     private Gerenciador<Grupo> gerenciadorGrupos;
 

@@ -14,7 +14,9 @@ public class Notificacao extends Entidade {
 
     private String mensagem;
     private UUID idParoquia;
+    @JsonProperty("lida")
     private boolean lida;
+    @JsonProperty("tipo")
     private String tipo;
 
     /**
